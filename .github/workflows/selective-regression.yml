@@ -271,7 +271,77 @@ jobs:
               print(f"  -> {wf}.yml")
           EOF
 
-      # ── Step 5: Dispatch WL_DNet_*.yml for each impacted workflow ────────────
+      # ── Step 5: Build per-file impact details ───────────────────────────────
+      - name: Build per-file impact details
+        if: steps.discover.outputs.pr_count != '0'
+        run: |
+          python3 - <<'EOF'
+          import json, yaml, sys
+          from pathlib import Path
+
+          fm           = yaml.safe_load(Path("config/feature-map.yml").read_text())
+          fm_modules   = fm.get("modules", {})
+          fm_sub_paths = fm.get("sub_paths", {})
+
+          def classify_file(filepath):
+              # 1. Sub-path: longest prefix match wins
+              best_prefix = None
+              best_entry  = None
+              for prefix, entry in fm_sub_paths.items():
+                  if filepath.startswith(prefix):
+                      if best_prefix is None or len(prefix) > len(best_prefix):
+                          best_prefix = prefix
+                          best_entry  = entry
+              if best_entry:
+                  return {
+                      "matched_by": "sub_path",
+                      "match_key":  best_prefix,
+                      "categories": best_entry.get("test_categories", []),
+                      "risk":       "medium",
+                  }
+              # 2. Module: prefix match on <ModuleName>/
+              for mod_name, mod_entry in fm_modules.items():
+                  if filepath.startswith(mod_name + "/"):
+                      return {
+                          "matched_by": "module",
+                          "match_key":  mod_name,
+                          "categories": mod_entry.get("test_categories", []),
+                          "risk":       mod_entry.get("risk_multiplier", "low"),
+                      }
+              # 3. Test file pattern
+              fp_lower = filepath.lower()
+              if ("/test/" in fp_lower or "/tests/" in fp_lower or
+                      fp_lower.endswith("test.java") or fp_lower.endswith("tests.java") or
+                      fp_lower.endswith("test.groovy") or fp_lower.endswith("test.cs")):
+                  return {"matched_by": "test_file", "match_key": None,
+                          "categories": [], "risk": "low"}
+              return {"matched_by": "none", "match_key": None, "categories": [], "risk": "low"}
+
+          prs    = json.loads(Path("state/prs_discovered.json").read_text())
+          report = {}
+
+          for pr_info in prs:
+              pr_num      = pr_info["number"]
+              impact_file = Path(f"state/cobalt_search/pr_impacts/pr_{pr_num}.json")
+              if not impact_file.exists():
+                  continue
+              impact     = json.loads(impact_file.read_text())
+              file_paths = impact.get("file_paths", [])
+              files      = [{"filename": fp, **classify_file(fp)} for fp in file_paths]
+              report[str(pr_num)] = {
+                  "pr_number": pr_num,
+                  "pr_title":  pr_info.get("title", ""),
+                  "pr_url":    pr_info.get("html_url", ""),
+                  "files":     files,
+              }
+              matched = sum(1 for f in files if f["matched_by"] != "none")
+              print(f"  PR #{pr_num}: {len(files)} file(s), {matched} mapped to test categories")
+
+          Path("state/per_file_impacts.json").write_text(json.dumps(report, indent=2))
+          print(f"Wrote state/per_file_impacts.json ({len(report)} PR(s))")
+          EOF
+
+      # ── Step 6: Dispatch WL_DNet_*.yml for each impacted workflow ────────────
       - name: Dispatch WL_DNet workflows
         if: steps.discover.outputs.pr_count != '0'
         env:
@@ -332,7 +402,7 @@ jobs:
               sys.exit(1)
           EOF
 
-      # ── Step 6: Job summary ──────────────────────────────────────────────────
+      # ── Step 7: Job summary ──────────────────────────────────────────────────
       - name: Write job summary
         if: always()
         env:
@@ -363,6 +433,8 @@ jobs:
           else:
               mode = f"Date range: `{date_from or '*'}` → `{date_to or 'now'}` · state=`{state}`"
 
+          RISK_BADGE = {"high": "🔴 high", "medium": "🟡 medium", "low": "🟢 low"}
+
           lines = [
               "## Selective Regression — Manual Dispatch",
               "",
@@ -379,29 +451,96 @@ jobs:
           if pr_count == 0:
               lines += ["### No PRs found matching the given criteria.", ""]
           else:
-              prs_file = Path("state/prs_discovered.json")
-              if prs_file.exists():
-                  prs = json.loads(prs_file.read_text())
-                  lines += ["### PRs Processed", "",
-                             "| PR | State | Created | Title |",
-                             "|---|---|---|---|"]
-                  for pr in prs:
-                      num     = pr["number"]
-                      url     = pr.get("html_url", "")
-                      title   = pr.get("title", "")[:55]
-                      s       = pr.get("state", "?")
-                      created = (pr.get("created_at") or "")[:10]
-                      merged  = " ✓" if pr.get("merged_at") else ""
-                      lines.append(f"| [#{num}]({url}) | {s}{merged} | {created} | {title} |")
-                  lines.append("")
+              prs_file     = Path("state/prs_discovered.json")
+              impacts_file = Path("state/per_file_impacts.json")
 
+              prs     = json.loads(prs_file.read_text())     if prs_file.exists()     else []
+              impacts = json.loads(impacts_file.read_text()) if impacts_file.exists() else {}
+
+              # ── PR overview table ─────────────────────────────────────────────
+              lines += ["### PRs Processed", "",
+                         "| PR | State | Created | Title |",
+                         "|---|---|---|---|"]
+              for pr in prs:
+                  num     = pr["number"]
+                  url     = pr.get("html_url", "")
+                  title   = pr.get("title", "")[:60]
+                  s       = pr.get("state", "?")
+                  created = (pr.get("created_at") or "")[:10]
+                  merged  = " ✓" if pr.get("merged_at") else ""
+                  lines.append(f"| [#{num}]({url}) | {s}{merged} | {created} | {title} |")
+              lines.append("")
+
+              # ── Per-PR file impact breakdown ──────────────────────────────────
+              lines += ["---", "", "## PR File Impact Details", ""]
+
+              for pr in prs:
+                  num   = pr["number"]
+                  url   = pr.get("html_url", "")
+                  title = pr.get("title", "")
+
+                  lines += [f"### [PR #{num}]({url})", f"> {title}", ""]
+
+                  pr_files = impacts.get(str(num), {}).get("files", [])
+
+                  if pr_files:
+                      lines += [
+                          "| File | Matched By | Module / Path | Risk | Test Categories |",
+                          "|------|------------|---------------|------|-----------------|",
+                      ]
+                      for f in pr_files:
+                          fname = f["filename"]
+                          m_by  = f.get("matched_by", "none")
+                          m_key = f.get("match_key") or "—"
+                          risk  = f.get("risk", "low")
+                          cats  = f.get("categories", [])
+
+                          disp_name = fname if len(fname) <= 65 else "…" + fname[-62:]
+                          disp_key  = m_key if len(m_key) <= 45 else "…" + m_key[-42:]
+
+                          if cats:
+                              shown    = cats[:3]
+                              overflow = len(cats) - 3
+                              cats_str = ", ".join(shown) + (f" +{overflow}" if overflow > 0 else "")
+                          else:
+                              cats_str = "—"
+
+                          lines.append(
+                              f"| `{disp_name}` | {m_by} | `{disp_key}` "
+                              f"| {RISK_BADGE.get(risk, risk)} | {cats_str} |"
+                          )
+                      lines.append("")
+                  else:
+                      lines += ["*No changed files recorded.*", ""]
+
+                  # Per-PR summary from test plan
+                  plan_file = Path(f"state/test_plans/pr_{num}.json")
+                  if plan_file.exists():
+                      plan = json.loads(plan_file.read_text())
+                      cats = plan.get("test_categories", [])
+                      risk = plan.get("risk_level", "")
+                      reason = plan.get("reason", "")
+                      if cats:
+                          lines += [
+                              f"**Risk level:** {RISK_BADGE.get(risk, risk or '—')} &nbsp;|&nbsp; "
+                              f"**Test categories ({len(cats)}):** {', '.join(cats)}",
+                              "",
+                          ]
+                      if reason:
+                          lines += [f"*{reason}*", ""]
+
+              # ── Dispatched workflows ──────────────────────────────────────────
               wf_json = Path("state/all_impacted_workflows.json")
               if wf_json.exists():
                   all_wf = json.loads(wf_json.read_text())
                   if all_wf:
-                      lines += ["### Workflows Dispatched", "", "| Workflow |", "|---|"]
+                      lines += ["---", "", "### Workflows Dispatched", "",
+                                 "| Workflow | Target Repo |",
+                                 "|---|---|"]
                       for wf in all_wf:
-                          lines.append(f"| `{wf}.yml` |")
+                          lines.append(
+                              f"| `{wf}.yml` | `tr/CobaltRegressionTesting` |"
+                          )
                       lines.append("")
 
           with open(os.environ.get("GITHUB_STEP_SUMMARY", "summary.md"), "a") as f:
