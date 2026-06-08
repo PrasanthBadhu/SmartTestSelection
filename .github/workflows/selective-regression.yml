@@ -30,60 +30,40 @@ name: Selective Regression
 on:
   workflow_dispatch:
     inputs:
-      pr_number:
-        description: "Source PR number"
-        required: true
-        type: string
-      pr_title:
-        description: "PR title"
+      pr_numbers:
+        description: "PR number(s), comma-separated (e.g. 2460,2461). If given, date range is ignored."
         required: false
         type: string
         default: ""
-      pr_url:
-        description: "PR URL"
+      date_from:
+        description: "Date range start — PRs created on/after (YYYY-MM-DD). Ignored if PR number(s) given."
         required: false
         type: string
         default: ""
-      head_sha:
-        description: "Head commit SHA"
+      date_to:
+        description: "Date range end — PRs created on/before (YYYY-MM-DD). Blank = up to now."
         required: false
         type: string
         default: ""
-      risk_level:
-        description: "Risk level: low | medium | high"
+      state:
+        description: "State filter for date range. 'merged' = closed PRs that were actually merged."
         required: false
-        type: string
-        default: "low"
-      modules:
-        description: "Comma-separated impacted modules"
-        required: false
-        type: string
-        default: ""
-      products:
-        description: "Comma-separated impacted products"
-        required: false
-        type: string
-        default: ""
-      dotnet_workflows:
-        description: "Comma-separated WL_DNet workflow names (without .yml)"
-        required: true
-        type: string
-      source_repo:
-        description: "Source GitHub repo that triggered this run (e.g. tr/cobalt_search)"
-        required: false
-        type: string
-        default: "tr/cobalt_search"
-      TEST_ENVIRONMENT:
-        description: "Setting to default TEST_ENVIRONMENT based on selection"
-        required: true
         type: choice
-        default: "DEMO"
+        default: "merged"
         options:
-          - DEMO
-          - DEMOAWS
+          - merged
+          - all
+          - open
+          - closed
+      env:
+        description: "Test environment to run against."
+        required: false
+        type: choice
+        default: "Demo"
+        options:
+          - Demo
           - QED
           - QEDAWS
-          - QEDAWS2
 
 permissions:
   contents: read
