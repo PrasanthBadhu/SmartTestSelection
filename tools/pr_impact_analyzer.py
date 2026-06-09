@@ -243,12 +243,16 @@ def main() -> None:
     cutoff_lookback = datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)
     cutoff_merged   = datetime.now(timezone.utc) - timedelta(hours=24)
     prs_to_trigger  = []
+    processed_set   = set()   # prevents double-processing within a single run
 
     def process_pr(pr):
+        if pr.number in processed_set:
+            return
+        processed_set.add(pr.number)
+
         pr_key      = str(pr.number)
         current_sha = pr.head.sha
         seen        = state.get(pr_key, {})
-
         is_forced   = pr.number in force_pr_set
 
         if seen.get("head_sha") == current_sha and not is_forced:
@@ -275,6 +279,15 @@ def main() -> None:
             "last_triggered": datetime.now(timezone.utc).isoformat(),
             "pr_title":       pr.title,
         }
+
+    # Direct fetch for forced PRs — bypasses the 24-hour merged window so that
+    # any PR number given explicitly (e.g. merged days ago) is always analysed.
+    for pr_num in sorted(force_pr_set):
+        try:
+            pr = repo.get_pull(pr_num)
+            process_pr(pr)
+        except GithubException as e:
+            print(f"  Warning: could not fetch forced PR #{pr_num}: {e}", file=sys.stderr)
 
     # Scan open PRs (the primary path for pre-merge quality gates)
     for pr in repo.get_pulls(state="open", sort="updated", direction="desc"):
