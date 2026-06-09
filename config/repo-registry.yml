@@ -48,9 +48,31 @@ repos:
     test_environment:   DEMO
     lookback_days:      7
 
+  # ── Static content repository ────────────────────────────────────────────────
+  - name:               cobalt_static-content
+    full_name:          tr/cobalt_static-content
+    enabled:            true
+    description:        "Cobalt static assets — CSS, JS, templates, images"
+    read_token_secret:  COBALT_READ_TOKEN
+    feature_map_repo:   tr/Seven-Kingdoms
+    feature_map_path:   feature-map-static-content.yml
+    feature_map_local:  "config/feature-map-static-content.yml"
+    test_environment:   DEMO
+    lookback_days:      7
+
+  # ── Website repository ───────────────────────────────────────────────────────
+  - name:               cobalt_website
+    full_name:          tr/cobalt_website
+    enabled:            true
+    description:        "Cobalt Website — UI, delivery, website features"
+    read_token_secret:  COBALT_READ_TOKEN
+    feature_map_repo:   tr/Seven-Kingdoms
+    feature_map_path:   feature-map-website.yml
+    feature_map_local:  "config/feature-map-website.yml"
+    test_environment:   DEMO
+    lookback_days:      7
+
   # ── Template for future repositories ────────────────────────────────────────
-  # Uncomment and fill in to onboard a new source repository.
-  #
   # - name:               cobalt_documents
   #   full_name:          tr/cobalt_documents
   #   enabled:            false
@@ -58,17 +80,6 @@ repos:
   #   read_token_secret:  COBALT_READ_TOKEN
   #   feature_map_repo:   tr/Seven-Kingdoms
   #   feature_map_path:   feature-map-documents.yml
-  #   feature_map_local:  ""
-  #   test_environment:   DEMO
-  #   lookback_days:      7
-  #
-  # - name:               cobalt_alerts
-  #   full_name:          tr/cobalt_alerts
-  #   enabled:            false
-  #   description:        "Cobalt Alerts service"
-  #   read_token_secret:  COBALT_ALERTS_READ_TOKEN
-  #   feature_map_repo:   tr/Seven-Kingdoms
-  #   feature_map_path:   feature-map-alerts.yml
   #   feature_map_local:  ""
   #   test_environment:   DEMO
   #   lookback_days:      7

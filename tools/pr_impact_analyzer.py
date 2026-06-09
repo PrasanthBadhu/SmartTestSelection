@@ -25,6 +25,11 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from github import Github, GithubException
 
+try:
+    import yaml as _yaml
+except ImportError:
+    _yaml = None
+
 # ---------------------------------------------------------------------------
 # Defaults (preserved from original for backwards compatibility)
 # ---------------------------------------------------------------------------
@@ -221,12 +226,31 @@ def main() -> None:
         "--force-prs",
         default="",
         help="Comma-separated PR numbers to force re-analysis regardless of SHA")
+    parser.add_argument(
+        "--feature-map",
+        default=None,
+        help="Path to a feature-map YAML; when provided, MODULE_PREFIXES and "
+             "SUB_PATH_PRODUCTS are loaded from it instead of the built-in defaults")
     args = parser.parse_args()
 
     gh_token = os.environ.get("GITHUB_TOKEN") or os.environ.get("COBALT_READ_TOKEN")
     if not gh_token:
         print("ERROR: GITHUB_TOKEN or COBALT_READ_TOKEN not set", file=sys.stderr)
         sys.exit(1)
+
+    # Dynamically override module/sub-path tables from the repo's feature map
+    if args.feature_map and _yaml:
+        fm_path = Path(args.feature_map)
+        if fm_path.exists():
+            fm = _yaml.safe_load(fm_path.read_text())
+            global MODULE_PREFIXES, SUB_PATH_PRODUCTS
+            MODULE_PREFIXES = {mod: mod + "/" for mod in fm.get("modules", {}).keys()}
+            SUB_PATH_PRODUCTS = {
+                prefix: entry.get("product", prefix.split("/")[-2] if "/" in prefix else prefix)
+                for prefix, entry in fm.get("sub_paths", {}).items()
+            }
+            print(f"  Loaded {len(MODULE_PREFIXES)} module(s) and "
+                  f"{len(SUB_PATH_PRODUCTS)} sub-path(s) from {fm_path}", file=sys.stderr)
 
     state_dir   = Path(args.state_dir)
     state_file  = state_dir / "last_seen_prs.json"

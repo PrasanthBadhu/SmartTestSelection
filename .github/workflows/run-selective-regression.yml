@@ -106,91 +106,101 @@ jobs:
           STATE:        ${{ inputs.state }}
         run: |
           python3 - <<'EOF'
-          import os, json, sys
+          import os, json, sys, yaml
           from datetime import datetime, timezone
           from pathlib import Path
           from github import Github, GithubException
-
-          REPO_FULL = "tr/cobalt_search"
 
           token = os.environ.get("GITHUB_TOKEN")
           if not token:
               print("ERROR: COBALT_READ_TOKEN not set", file=sys.stderr)
               sys.exit(1)
 
-          g    = Github(token)
-          repo = g.get_repo(REPO_FULL)
+          registry      = yaml.safe_load(Path("config/repo-registry.yml").read_text())
+          enabled_repos = [r for r in registry.get("repos", []) if r.get("enabled")]
 
           pr_numbers_raw = os.environ.get("PR_NUMBERS", "").strip()
           date_from_raw  = os.environ.get("DATE_FROM", "").strip()
           date_to_raw    = os.environ.get("DATE_TO", "").strip()
           state_filter   = os.environ.get("STATE", "merged").strip().lower()
 
-          pr_list = []
-
-          if pr_numbers_raw:
-              # Mode 1 — explicit PR numbers; date range and state are ignored
-              print(f"Mode: explicit PR numbers ({pr_numbers_raw})", file=sys.stderr)
-              for num_str in pr_numbers_raw.split(","):
-                  num_str = num_str.strip()
-                  if not num_str.isdigit():
-                      continue
-                  try:
-                      pr = repo.get_pull(int(num_str))
-                      pr_list.append(pr)
-                      print(f"  Found PR #{pr.number}: {pr.title[:70]}", file=sys.stderr)
-                  except GithubException as e:
-                      print(f"  WARNING: Could not fetch PR #{num_str}: {e}", file=sys.stderr)
-          else:
-              # Mode 2 — date range + state filter
-              date_from = None
-              date_to   = None
+          date_from = None
+          date_to   = None
+          if not pr_numbers_raw:
               if date_from_raw:
                   date_from = datetime.strptime(date_from_raw, "%Y-%m-%d").replace(tzinfo=timezone.utc)
               if date_to_raw:
                   date_to = datetime.strptime(date_to_raw, "%Y-%m-%d").replace(
                       hour=23, minute=59, second=59, tzinfo=timezone.utc)
 
-              print(f"Mode: date range [{date_from_raw or '*'} → {date_to_raw or 'now'}] state={state_filter}",
-                    file=sys.stderr)
+          g        = Github(token)
+          pr_list  = []
+          seen_ids = set()
 
-              # Map 'merged' → query 'closed'; 'all' → query 'all'
-              api_state = "closed" if state_filter == "merged" else (
-                          state_filter if state_filter != "all" else "all")
+          def add_pr(pr, repo_entry):
+              key = (repo_entry["full_name"], pr.number)
+              if key in seen_ids:
+                  return
+              seen_ids.add(key)
+              pr_list.append({
+                  "repo_name":         repo_entry["name"],
+                  "repo_full_name":    repo_entry["full_name"],
+                  "feature_map_local": repo_entry.get("feature_map_local", ""),
+                  "number":            pr.number,
+                  "title":             pr.title,
+                  "html_url":          pr.html_url,
+                  "head_sha":          pr.head.sha,
+                  "state":             pr.state,
+                  "merged_at":         pr.merged_at.isoformat() if pr.merged_at  else None,
+                  "created_at":        pr.created_at.isoformat() if pr.created_at else None,
+              })
 
-              for pr in repo.get_pulls(state=api_state, sort="created", direction="desc"):
-                  created = pr.created_at
-                  if date_from and created < date_from:
-                      break  # sorted desc by created — nothing older will match
-                  if date_to and created > date_to:
-                      continue
-                  if state_filter == "merged" and not pr.merged_at:
-                      continue
-                  pr_list.append(pr)
-                  print(f"  PR #{pr.number} ({pr.state}) [{created.date()}]: {pr.title[:60]}",
-                        file=sys.stderr)
+          for repo_entry in enabled_repos:
+              repo_full = repo_entry["full_name"]
+              print(f"\nScanning {repo_full} ...", file=sys.stderr)
+              try:
+                  gh_repo = g.get_repo(repo_full)
+              except GithubException as e:
+                  print(f"  WARNING: cannot access {repo_full}: {e}", file=sys.stderr)
+                  continue
 
-          print(f"Total PRs to analyze: {len(pr_list)}", file=sys.stderr)
+              if pr_numbers_raw:
+                  print(f"  Mode: explicit PR numbers ({pr_numbers_raw})", file=sys.stderr)
+                  for num_str in pr_numbers_raw.split(","):
+                      num_str = num_str.strip()
+                      if not num_str.isdigit():
+                          continue
+                      try:
+                          pr = gh_repo.get_pull(int(num_str))
+                          add_pr(pr, repo_entry)
+                          print(f"  Found PR #{pr.number}: {pr.title[:60]}", file=sys.stderr)
+                      except GithubException as e:
+                          print(f"  PR #{num_str} not in {repo_full}: {e}", file=sys.stderr)
+              else:
+                  api_state = "closed" if state_filter == "merged" else (
+                              state_filter if state_filter != "all" else "all")
+                  for pr in gh_repo.get_pulls(state=api_state, sort="created", direction="desc"):
+                      created = pr.created_at
+                      if date_from and created < date_from:
+                          break
+                      if date_to and created > date_to:
+                          continue
+                      if state_filter == "merged" and not pr.merged_at:
+                          continue
+                      add_pr(pr, repo_entry)
+                      print(f"  PR #{pr.number} [{created.date()}]: {pr.title[:55]}", file=sys.stderr)
+
+          print(f"\nTotal PRs to analyze: {len(pr_list)} "
+                f"across {len(enabled_repos)} repo(s)", file=sys.stderr)
 
           Path("state").mkdir(parents=True, exist_ok=True)
-          Path("state/prs_discovered.json").write_text(json.dumps([
-              {
-                  "number":     pr.number,
-                  "title":      pr.title,
-                  "html_url":   pr.html_url,
-                  "head_sha":   pr.head.sha,
-                  "state":      pr.state,
-                  "merged_at":  pr.merged_at.isoformat() if pr.merged_at  else None,
-                  "created_at": pr.created_at.isoformat() if pr.created_at else None,
-              }
-              for pr in pr_list
-          ], indent=2))
+          Path("state/prs_discovered.json").write_text(json.dumps(pr_list, indent=2))
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"pr_count={len(pr_list)}\n")
           EOF
 
-      # ── Step 3: Analyze PR file impact ──────────────────────────────────────
+      # ── Step 3: Analyze PR file impact (per-repo) ───────────────────────────
       - name: Analyze PR impact
         if: steps.discover.outputs.pr_count != '0'
         id: analyze
@@ -201,29 +211,37 @@ jobs:
           import json, os, subprocess, sys
           from pathlib import Path
 
-          prs       = json.loads(Path("state/prs_discovered.json").read_text())
-          state_dir = Path("state/cobalt_search")
-          state_dir.mkdir(parents=True, exist_ok=True)
+          prs = json.loads(Path("state/prs_discovered.json").read_text())
 
           for pr_info in prs:
-              pr_num = pr_info["number"]
+              pr_num         = pr_info["number"]
+              repo_name      = pr_info.get("repo_name",      "cobalt_search")
+              repo_full_name = pr_info.get("repo_full_name", "tr/cobalt_search")
+              fm_local       = pr_info.get("feature_map_local", "")
+
+              state_dir = Path(f"state/{repo_name}")
+              state_dir.mkdir(parents=True, exist_ok=True)
+
               cmd = [
                   sys.executable, "tools/pr_impact_analyzer.py",
-                  "--repo",      "tr/cobalt_search",
+                  "--repo",      repo_full_name,
                   "--state-dir", str(state_dir),
                   "--force-prs", str(pr_num),
               ]
+              if fm_local and Path(fm_local).exists():
+                  cmd += ["--feature-map", fm_local]
+
               result = subprocess.run(cmd, capture_output=True, text=True, env=os.environ.copy())
               if result.returncode != 0:
-                  print(f"  WARNING: analysis failed for PR #{pr_num}: {result.stderr.strip()}",
-                        file=sys.stderr)
+                  print(f"  WARNING: analysis failed for {repo_name} PR #{pr_num}: "
+                        f"{result.stderr.strip()}", file=sys.stderr)
                   continue
-              print(f"  Analyzed PR #{pr_num}", file=sys.stderr)
+              print(f"  Analyzed {repo_name} PR #{pr_num}")
               if result.stderr.strip():
                   print(f"    {result.stderr.strip()}", file=sys.stderr)
           EOF
 
-      # ── Step 4: Map impact to WL_DNet workflows (local feature-map) ─────────
+      # ── Step 4: Map impact to WL_DNet workflows (per-repo feature-map) ───────
       - name: Map impact to test workflows
         if: steps.discover.outputs.pr_count != '0'
         id: map
@@ -239,30 +257,37 @@ jobs:
           plan_count = 0
 
           for pr_info in prs:
-              pr_num      = pr_info["number"]
-              impact_file = Path(f"state/cobalt_search/pr_impacts/pr_{pr_num}.json")
-              plan_file   = plans_dir / f"pr_{pr_num}.json"
+              pr_num    = pr_info["number"]
+              repo_name = pr_info.get("repo_name", "cobalt_search")
+              fm_local  = pr_info.get("feature_map_local", "config/feature-map.yml")
+              pr_key    = f"{repo_name}_{pr_num}"
+
+              fm_path     = fm_local if fm_local and Path(fm_local).exists() \
+                            else "config/feature-map.yml"
+              impact_file = Path(f"state/{repo_name}/pr_impacts/pr_{pr_num}.json")
+              plan_file   = plans_dir / f"{pr_key}.json"
 
               if not impact_file.exists():
-                  print(f"  SKIP PR #{pr_num}: no impact file generated", file=sys.stderr)
+                  print(f"  SKIP {repo_name} PR #{pr_num}: no impact file", file=sys.stderr)
                   continue
 
               cmd = [
                   sys.executable, "tools/feature_test_mapper.py",
                   "--impact",    str(impact_file),
                   "--output",    str(plan_file),
-                  "--map-local", "config/feature-map.yml",
+                  "--map-local", fm_path,
               ]
               result = subprocess.run(cmd, capture_output=True, text=True)
               if result.returncode != 0:
-                  print(f"  FAIL PR #{pr_num}: {result.stderr.strip()}", file=sys.stderr)
+                  print(f"  FAIL {repo_name} PR #{pr_num}: {result.stderr.strip()}", file=sys.stderr)
                   continue
 
               plan = json.loads(plan_file.read_text())
               if not plan.get("skip_all"):
                   all_wf.update(plan.get("dotnet_workflows", []))
               plan_count += 1
-              print(f"  PR #{pr_num}: {len(plan.get('dotnet_workflows',[]))} workflow(s) "
+              print(f"  {repo_name} PR #{pr_num}: "
+                    f"{len(plan.get('dotnet_workflows',[]))} workflow(s) "
                     f"[{plan.get('risk_level','?').upper()}]")
 
           Path("state/all_impacted_workflows.json").write_text(json.dumps(sorted(all_wf), indent=2))
@@ -276,7 +301,7 @@ jobs:
               print(f"  -> {wf}.yml")
           EOF
 
-      # ── Step 5: Build per-file impact details ───────────────────────────────
+      # ── Step 5: Build per-file impact details (per-repo feature-map) ─────────
       - name: Build per-file impact details
         if: steps.discover.outputs.pr_count != '0'
         run: |
@@ -284,36 +309,34 @@ jobs:
           import json, yaml, sys
           from pathlib import Path
 
-          fm           = yaml.safe_load(Path("config/feature-map.yml").read_text())
-          fm_modules   = fm.get("modules", {})
-          fm_sub_paths = fm.get("sub_paths", {})
+          _fm_cache = {}
 
-          def classify_file(filepath):
-              # 1. Sub-path: longest prefix match wins
-              best_prefix = None
-              best_entry  = None
+          def load_fm(path):
+              if path not in _fm_cache:
+                  p = Path(path)
+                  if not p.exists():
+                      p = Path("config/feature-map.yml")
+                  _fm_cache[path] = yaml.safe_load(p.read_text())
+              return _fm_cache[path]
+
+          def classify_file(filepath, fm):
+              fm_modules   = fm.get("modules", {})
+              fm_sub_paths = fm.get("sub_paths", {})
+              best_prefix  = None
+              best_entry   = None
               for prefix, entry in fm_sub_paths.items():
                   if filepath.startswith(prefix):
                       if best_prefix is None or len(prefix) > len(best_prefix):
                           best_prefix = prefix
                           best_entry  = entry
               if best_entry:
-                  return {
-                      "matched_by": "sub_path",
-                      "match_key":  best_prefix,
-                      "categories": best_entry.get("test_categories", []),
-                      "risk":       "medium",
-                  }
-              # 2. Module: prefix match on <ModuleName>/
+                  return {"matched_by": "sub_path", "match_key": best_prefix,
+                          "categories": best_entry.get("test_categories", []), "risk": "medium"}
               for mod_name, mod_entry in fm_modules.items():
                   if filepath.startswith(mod_name + "/"):
-                      return {
-                          "matched_by": "module",
-                          "match_key":  mod_name,
-                          "categories": mod_entry.get("test_categories", []),
-                          "risk":       mod_entry.get("risk_multiplier", "low"),
-                      }
-              # 3. Test file pattern
+                      return {"matched_by": "module", "match_key": mod_name,
+                              "categories": mod_entry.get("test_categories", []),
+                              "risk": mod_entry.get("risk_multiplier", "low")}
               fp_lower = filepath.lower()
               if ("/test/" in fp_lower or "/tests/" in fp_lower or
                       fp_lower.endswith("test.java") or fp_lower.endswith("tests.java") or
@@ -326,21 +349,30 @@ jobs:
           report = {}
 
           for pr_info in prs:
-              pr_num      = pr_info["number"]
-              impact_file = Path(f"state/cobalt_search/pr_impacts/pr_{pr_num}.json")
+              pr_num    = pr_info["number"]
+              repo_name = pr_info.get("repo_name", "cobalt_search")
+              fm_local  = pr_info.get("feature_map_local", "config/feature-map.yml")
+              pr_key    = f"{repo_name}_{pr_num}"
+
+              impact_file = Path(f"state/{repo_name}/pr_impacts/pr_{pr_num}.json")
               if not impact_file.exists():
                   continue
+
+              fm         = load_fm(fm_local or "config/feature-map.yml")
               impact     = json.loads(impact_file.read_text())
               file_paths = impact.get("file_paths", [])
-              files      = [{"filename": fp, **classify_file(fp)} for fp in file_paths]
-              report[str(pr_num)] = {
+              files      = [{"filename": fp, **classify_file(fp, fm)} for fp in file_paths]
+
+              report[pr_key] = {
+                  "repo_name": repo_name,
                   "pr_number": pr_num,
+                  "pr_title":  pr_info.get("title", ""),
                   "pr_title":  pr_info.get("title", ""),
                   "pr_url":    pr_info.get("html_url", ""),
                   "files":     files,
               }
               matched = sum(1 for f in files if f["matched_by"] != "none")
-              print(f"  PR #{pr_num}: {len(files)} file(s), {matched} mapped to test categories")
+              print(f"  {repo_name} PR #{pr_num}: {len(files)} file(s), {matched} mapped")
 
           Path("state/per_file_impacts.json").write_text(json.dumps(report, indent=2))
           print(f"Wrote state/per_file_impacts.json ({len(report)} PR(s))")
@@ -375,7 +407,9 @@ jobs:
 
           for pr_info in prs:
               pr_num    = pr_info["number"]
-              plan_file = Path(f"state/test_plans/pr_{pr_num}.json")
+              repo_name = pr_info.get("repo_name", "cobalt_search")
+              pr_key    = f"{repo_name}_{pr_num}"
+              plan_file = Path(f"state/test_plans/{pr_key}.json")
 
               if not plan_file.exists():
                   print(f"  SKIP PR #{pr_num}: no test plan generated", file=sys.stderr)
@@ -385,17 +419,18 @@ jobs:
               plan = json.loads(plan_file.read_text())
 
               if plan.get("skip_all"):
-                  print(f"  SKIP PR #{pr_num}: skip_all=true ({plan.get('reason','')})")
+                  print(f"  SKIP {repo_name} PR #{pr_num}: skip_all=true ({plan.get('reason','')})")
                   skipped += 1
                   continue
 
               workflows = plan.get("dotnet_workflows", [])
               if not workflows:
-                  print(f"  SKIP PR #{pr_num}: no workflows mapped", file=sys.stderr)
+                  print(f"  SKIP {repo_name} PR #{pr_num}: no workflows mapped", file=sys.stderr)
                   skipped += 1
                   continue
 
-              candidates = list(dict.fromkeys([test_env] + ENV_ALIASES.get(test_env, [])))
+              source_repo = pr_info.get("repo_full_name", "tr/cobalt_search")
+              candidates  = list(dict.fromkeys([test_env] + ENV_ALIASES.get(test_env, [])))
               cmd = [
                   gh, "workflow", "run", "selective-regression.yml",
                   "--repo", repo,
@@ -407,15 +442,15 @@ jobs:
                   "-f", f"modules={','.join(plan.get('modules',[]))}",
                   "-f", f"products={','.join(plan.get('products',[]))}",
                   "-f", f"dotnet_workflows={','.join(workflows)}",
-                  "-f", f"source_repo=tr/cobalt_search",
+                  "-f", f"source_repo={source_repo}",
                   "-f", f"TEST_ENVIRONMENT={candidates[0]}",
               ]
               result = subprocess.run(cmd, capture_output=True, text=True)
               if result.returncode == 0:
-                  print(f"  OK  PR #{pr_num}: dispatched {len(workflows)} workflow(s) [{test_env}]")
+                  print(f"  OK  {repo_name} PR #{pr_num}: dispatched {len(workflows)} workflow(s) [{test_env}]")
                   dispatched += 1
               else:
-                  print(f"  FAIL PR #{pr_num}: {result.stderr.strip()}", file=sys.stderr)
+                  print(f"  FAIL {repo_name} PR #{pr_num}: {result.stderr.strip()}", file=sys.stderr)
                   failed += 1
 
           print(f"\nDispatched: {dispatched}  Skipped: {skipped}  Failed: {failed}")
@@ -475,34 +510,37 @@ jobs:
               prs_file     = Path("state/prs_discovered.json")
               impacts_file = Path("state/per_file_impacts.json")
 
-              prs     = json.loads(prs_file.read_text())     if prs_file.exists()     else []
+              prs     = json.loads(prs_file.read_text())    if prs_file.exists()     else []
               impacts = json.loads(impacts_file.read_text()) if impacts_file.exists() else {}
 
               # ── PR overview table ─────────────────────────────────────────────
               lines += ["### PRs Processed", "",
-                         "| PR | State | Created | Title |",
-                         "|---|---|---|---|"]
+                         "| Repository | PR | State | Created | Title |",
+                         "|---|---|---|---|---|"]
               for pr in prs:
-                  num     = pr["number"]
-                  url     = pr.get("html_url", "")
-                  title   = pr.get("title", "")[:60]
-                  s       = pr.get("state", "?")
-                  created = (pr.get("created_at") or "")[:10]
-                  merged  = " ✓" if pr.get("merged_at") else ""
-                  lines.append(f"| [#{num}]({url}) | {s}{merged} | {created} | {title} |")
+                  num       = pr["number"]
+                  url       = pr.get("html_url", "")
+                  title     = pr.get("title", "")[:55]
+                  s         = pr.get("state", "?")
+                  created   = (pr.get("created_at") or "")[:10]
+                  merged    = " ✓" if pr.get("merged_at") else ""
+                  repo_name = pr.get("repo_name", "cobalt_search")
+                  lines.append(f"| `{repo_name}` | [#{num}]({url}) | {s}{merged} | {created} | {title} |")
               lines.append("")
 
               # ── Per-PR file impact breakdown ──────────────────────────────────
               lines += ["---", "", "## PR File Impact Details", ""]
 
               for pr in prs:
-                  num   = pr["number"]
-                  url   = pr.get("html_url", "")
-                  title = pr.get("title", "")
+                  num       = pr["number"]
+                  url       = pr.get("html_url", "")
+                  title     = pr.get("title", "")
+                  repo_name = pr.get("repo_name", "cobalt_search")
+                  pr_key    = f"{repo_name}_{num}"
 
-                  lines += [f"### [PR #{num}]({url})", f"> {title}", ""]
+                  lines += [f"### [{repo_name} — PR #{num}]({url})", f"> {title}", ""]
 
-                  pr_files = impacts.get(str(num), {}).get("files", [])
+                  pr_files = impacts.get(pr_key, {}).get("files", [])
 
                   if pr_files:
                       lines += [
@@ -535,11 +573,11 @@ jobs:
                       lines += ["*No changed files recorded.*", ""]
 
                   # Per-PR summary from test plan
-                  plan_file = Path(f"state/test_plans/pr_{num}.json")
+                  plan_file = Path(f"state/test_plans/{pr_key}.json")
                   if plan_file.exists():
-                      plan = json.loads(plan_file.read_text())
-                      cats = plan.get("test_categories", [])
-                      risk = plan.get("risk_level", "")
+                      plan   = json.loads(plan_file.read_text())
+                      cats   = plan.get("test_categories", [])
+                      risk   = plan.get("risk_level", "")
                       reason = plan.get("reason", "")
                       if cats:
                           lines += [
