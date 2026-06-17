@@ -32,7 +32,7 @@
 #       categories are the primary test targets.
 ################################################################################
 
-version: "1.0"
+version: "2.0"
 last_updated: "2026-06-17"
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -53,6 +53,9 @@ modules:
       - SmartSearch
       - MiscellaneousSearch
       - SearchMiscellaneous
+      - IndigoTrdTypeahead
+      - TCOSectionEdge
+      - TCOSectionWln
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -65,6 +68,9 @@ modules:
       - AdvancedSearchTemplate
       - BrowsePageSearch
       - SmartSearch
+      - IndigoTrdTypeahead
+      - TCOSectionEdge
+      - TCOSectionWln
       - EdgeSmokeFeatures
     risk_multiplier: medium
 
@@ -109,6 +115,9 @@ sub_paths:
       - SmartSearch
       - MiscellaneousSearch
       - SearchMiscellaneous
+      - IndigoTrdTypeahead
+      - TCOSectionEdge
+      - TCOSectionWln
       - EdgeSmokeFeatures
 
   # ── WLN Typeahead ────────────────────────────────────────────────────────────
@@ -121,6 +130,9 @@ sub_paths:
       - AdvancedSearchTemplate
       - BrowsePageSearch
       - SmartSearch
+      - IndigoTrdTypeahead
+      - TCOSectionEdge
+      - TCOSectionWln
       - EdgeSmokeFeatures
 
   "WLNTypeahead/WebContent/":
@@ -246,6 +258,37 @@ keywords:
     test_categories:
       - CoreSearch
       - WLNCorrectional
+      - EdgeSmokeFeatures
+
+  "trd typeahead":
+    product: WestlawNext
+    test_categories:
+      - IndigoTrdTypeahead
+      - CoreSearch
+      - GlobalSearch
+      - EdgeSmokeFeatures
+
+  "tco":
+    product: WestlawNext
+    test_categories:
+      - TCOSectionEdge
+      - TCOSectionWln
+      - CoreSearch
+      - EdgeSmokeFeatures
+
+  "tco section":
+    product: WestlawNext
+    test_categories:
+      - TCOSectionEdge
+      - TCOSectionWln
+      - EdgeSmokeFeatures
+
+  "indigo typeahead":
+    product: WestlawNext
+    test_categories:
+      - IndigoTrdTypeahead
+      - TCOSectionEdge
+      - TCOSectionWln
       - EdgeSmokeFeatures
 
 # ──────────────────────────────────────────────────────────────────────────────

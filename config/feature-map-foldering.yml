@@ -35,7 +35,7 @@
 #   eReaderFoldering/       eReader foldering module
 ################################################################################
 
-version: "1.0"
+version: "2.0"
 last_updated: "2026-06-17"
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -60,6 +60,7 @@ modules:
       - NewSmartFolders
       - SmartFolders
       - AnzFoldering
+      - SaveSnippet_Edge
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -78,6 +79,7 @@ modules:
       - NewSmartFolders
       - SmartFolders
       - AnzFoldering
+      - SaveSnippet_Edge
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -110,6 +112,7 @@ modules:
       - ResearchOrganizer
       - FolderRedesign1
       - FolderRedesign2
+      - SaveSnippet_Edge
       - EdgeSmokeFeatures
     risk_multiplier: medium
 
@@ -206,6 +209,7 @@ sub_paths:
       - NewSmartFolders
       - SmartFolders
       - AnzFoldering
+      - SaveSnippet_Edge
       - EdgeSmokeFeatures
 
   "Foldering/WebContent/":
@@ -252,6 +256,7 @@ sub_paths:
       - NewSmartFolders
       - SmartFolders
       - AnzFoldering
+      - SaveSnippet_Edge
       - EdgeSmokeFeatures
 
   # ── Foldering Serialized ─────────────────────────────────────────────────────
@@ -535,6 +540,27 @@ keywords:
     test_categories:
       - Foldering
       - ResearchOrganizer
+      - EdgeSmokeFeatures
+
+  snippet:
+    product: Foldering
+    test_categories:
+      - SaveSnippet_Edge
+      - Foldering
+      - EdgeSmokeFeatures
+
+  "save snippet":
+    product: Foldering
+    test_categories:
+      - SaveSnippet_Edge
+      - Foldering
+      - EdgeSmokeFeatures
+
+  "non root":
+    product: Foldering
+    test_categories:
+      - SaveSnippet_Edge
+      - Foldering
       - EdgeSmokeFeatures
 
 # ──────────────────────────────────────────────────────────────────────────────

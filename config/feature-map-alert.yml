@@ -41,7 +41,7 @@
 #   LoggingConfig/          Logging configuration
 ################################################################################
 
-version: "1.0"
+version: "2.0"
 last_updated: "2026-06-17"
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -61,6 +61,8 @@ modules:
       - CapitolWatch
       - AnzAlerts
       - AnalyticsAlertsEnhancements
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -74,6 +76,8 @@ modules:
       - CapitolWatch
       - AnzAlerts
       - AnalyticsAlertsEnhancements
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -86,6 +90,8 @@ modules:
       - AlertsAdmin
       - CapitolWatch
       - AnzAlerts
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -109,6 +115,8 @@ modules:
       - AlertsAdmin
       - CapitolWatch
       - AnzAlerts
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
     risk_multiplier: high
 
@@ -207,6 +215,8 @@ modules:
       - Alerts
       - AlertsAdmin
       - CapitolWatch
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
     risk_multiplier: medium
 
@@ -239,6 +249,8 @@ sub_paths:
       - CapitolWatch
       - AnzAlerts
       - AnalyticsAlertsEnhancements
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
 
   "Alert/WebContent/":
@@ -268,6 +280,8 @@ sub_paths:
       - CapitolWatch
       - AnzAlerts
       - AnalyticsAlertsEnhancements
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
 
   # ── Alert Processor ──────────────────────────────────────────────────────────
@@ -280,6 +294,8 @@ sub_paths:
       - AlertsAdmin
       - CapitolWatch
       - AnzAlerts
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
 
   "AlertProcessor/integration/":
@@ -310,6 +326,8 @@ sub_paths:
       - AlertsAdmin
       - CapitolWatch
       - AnzAlerts
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
 
   # ── Alert Serialized ─────────────────────────────────────────────────────────
@@ -387,6 +405,8 @@ sub_paths:
       - Alerts
       - AlertsAdmin
       - CapitolWatch
+      - WestlawTodayAlerts
+      - CustomDigestSearch
       - EdgeSmokeFeatures
 
   "WLNAlert/EndpointTests/":
@@ -550,6 +570,36 @@ keywords:
       - AlertAccess
       - Alerts
       - AlertsAdmin
+      - EdgeSmokeFeatures
+
+  "westlaw today":
+    product: Alerts
+    test_categories:
+      - WestlawTodayAlerts
+      - AlertAccess
+      - EdgeSmokeFeatures
+
+  wlt:
+    product: Alerts
+    test_categories:
+      - WestlawTodayAlerts
+      - AlertAccess
+      - EdgeSmokeFeatures
+
+  "custom digest":
+    product: Alerts
+    test_categories:
+      - CustomDigestSearch
+      - AlertAccess
+      - Alerts
+      - EdgeSmokeFeatures
+
+  digest:
+    product: Alerts
+    test_categories:
+      - CustomDigestSearch
+      - AlertAccess
+      - Alerts
       - EdgeSmokeFeatures
 
 # ──────────────────────────────────────────────────────────────────────────────
