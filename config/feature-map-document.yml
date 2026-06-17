@@ -1,0 +1,464 @@
+################################################################################
+# feature-map-document.yml
+# Location: config/feature-map-document.yml
+#
+# Purpose:
+#   Maps tr/cobalt_document_netcore file paths / keywords to TestCategory names.
+#   TestCategory names match @SET CATEGORY_NAME=TestCategory=<name> in
+#   config/dotnet/**/*.bat files in tr/CobaltRegressionTesting.
+#
+# Mapping chain:
+#   cobalt_document_netcore changed files
+#     -> module / sub_path / keyword
+#       -> test_categories (this file)
+#         -> bat files with CATEGORY_NAME=TestCategory=<name>
+#           -> WL_DNet_*.yml workflows
+#
+# Priority order (highest wins):
+#   1. sub_path  — longest prefix match on the changed file path
+#   2. module    — top-level folder prefix match
+#   3. keyword   — PR title / body text match (case-insensitive)
+#
+# Repo layout (verified via git ls-tree HEAD --name-only in tr/cobalt_document_netcore):
+#   Document/               Core .NET document engine (shared by all products)
+#   WestlawNext/            Westlaw Next document handling
+#   Carswell/               Carswell / LN Canada document handling
+#   Correctional/           Correctional law document handling
+#   Drafting/               Legislative drafting document handling
+#   SLWB/                   SLWB document handling
+#   TNPCarswell/            Thomson Newspapers Platform / Carswell document handling
+#   Weblinks/               Government weblinks document handling
+#   DocumentSuperbuild/     Multi-module build configuration
+#   Binaries/               Pre-compiled binaries and utilities
+#   docs/                   Documentation (skip_all applied via change_type_rules)
+################################################################################
+
+version: "1.0"
+last_updated: "2026-06-17"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# MODULE MAPPINGS  (key = top-level folder name in cobalt_document_netcore)
+# Prefix match: any file whose path starts with "<key>/" maps here.
+# risk_multiplier: high | medium | low
+# ──────────────────────────────────────────────────────────────────────────────
+modules:
+
+  Document:
+    description: "Core .NET document engine — shared pipeline, controllers, domain, caching"
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - WebsiteDelivery
+      - PrPSynopsisDelivery
+      - ResearchReportsDelivery
+      - RelatedInfoDelivery
+      - EdgeSmokeFeatures
+    risk_multiplier: high
+
+  WestlawNext:
+    description: "Westlaw Next document handling — rendering, delivery, display"
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - WebsiteDelivery
+      - PrPSynopsisDelivery
+      - ResearchReportsDelivery
+      - RelatedInfoDelivery
+      - CoreSearch
+      - GlobalSearch
+      - EdgeSmokeFeatures
+    risk_multiplier: high
+
+  Carswell:
+    description: "Carswell / LN Canada document handling"
+    test_categories:
+      - CanadaDocDisplay
+      - DocumentMisc
+      - Trillium
+      - TrilliumWebSite
+      - DocDisplay
+      - DOCX
+      - EdgeSmokeFeatures
+    risk_multiplier: medium
+
+  Correctional:
+    description: "Correctional law document handling"
+    test_categories:
+      - WLNCorrectional
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+    risk_multiplier: low
+
+  Drafting:
+    description: "Legislative drafting document handling"
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+    risk_multiplier: low
+
+  SLWB:
+    description: "SLWB document handling"
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+    risk_multiplier: medium
+
+  TNPCarswell:
+    description: "Thomson Newspapers Platform / Carswell document handling"
+    test_categories:
+      - CanadaDocDisplay
+      - DocumentMisc
+      - DocDisplay
+      - EdgeSmokeFeatures
+    risk_multiplier: low
+
+  Weblinks:
+    description: "Government weblinks document integration"
+    test_categories:
+      - GovernmentWeblinks
+      - Links
+      - DocDisplay
+      - EdgeSmokeFeatures
+    risk_multiplier: low
+
+  DocumentSuperbuild:
+    description: "Multi-module build configuration — rarely needs test triggers"
+    test_categories:
+      - EdgeSmokeFeatures
+    risk_multiplier: low
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SUB-MODULE PATH MAPPINGS  (key = file path prefix, longest match wins)
+# Priority 1 (highest).  Each product module follows the pattern:
+#   <Product>/<ProductName>Document/   — main implementation
+#   <Product>/<ProductName>UnitTests/  — unit tests (skip_integration applies)
+# ──────────────────────────────────────────────────────────────────────────────
+sub_paths:
+
+  # ── Core document engine ─────────────────────────────────────────────────────
+  "Document/Document/Controllers/":
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  "Document/Document/Pipeline/":
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - WebsiteDelivery
+      - RelatedInfoDelivery
+      - EdgeSmokeFeatures
+
+  "Document/Document/Domain/":
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - EdgeSmokeFeatures
+
+  "Document/Document/Xslt/":
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  "Document/Document/Views/":
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  # ── Westlaw Next ─────────────────────────────────────────────────────────────
+  "WestlawNext/WestlawNextDocument/":
+    product: WestlawNext
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - WebsiteDelivery
+      - PrPSynopsisDelivery
+      - ResearchReportsDelivery
+      - RelatedInfoDelivery
+      - CoreSearch
+      - GlobalSearch
+      - EdgeSmokeFeatures
+
+  "WestlawNext/WestlawNextIntegrationTests/":
+    product: WestlawNext
+    test_categories:
+      - Document
+      - DocDisplay
+      - EdgeSmokeFeatures
+
+  # ── Carswell / Canada ────────────────────────────────────────────────────────
+  "Carswell/CarswellDocument/":
+    product: Canada
+    test_categories:
+      - CanadaDocDisplay
+      - DocumentMisc
+      - Trillium
+      - TrilliumWebSite
+      - DocDisplay
+      - DOCX
+      - EdgeSmokeFeatures
+
+  # ── Correctional ─────────────────────────────────────────────────────────────
+  "Correctional/CorrectionalDocument/":
+    product: Correctional
+    test_categories:
+      - WLNCorrectional
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  # ── Drafting ─────────────────────────────────────────────────────────────────
+  "Drafting/DraftingDocument/":
+    product: Drafting
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  # ── SLWB ─────────────────────────────────────────────────────────────────────
+  "SLWB/SLWBDocument/":
+    product: SLWB
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  # ── TNP Carswell ─────────────────────────────────────────────────────────────
+  "TNPCarswell/TNPCarswellDocument/":
+    product: Canada
+    test_categories:
+      - CanadaDocDisplay
+      - DocumentMisc
+      - DocDisplay
+      - EdgeSmokeFeatures
+
+  # ── Weblinks ─────────────────────────────────────────────────────────────────
+  "Weblinks/WeblinksDocument/":
+    product: Weblinks
+    test_categories:
+      - GovernmentWeblinks
+      - Links
+      - DocDisplay
+      - EdgeSmokeFeatures
+
+# ──────────────────────────────────────────────────────────────────────────────
+# KEYWORD MAPPINGS  (matched against PR title + body, case-insensitive)
+# Priority 3 (lowest — fires when no module or sub_path match is found).
+# ──────────────────────────────────────────────────────────────────────────────
+keywords:
+
+  document:
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - EdgeSmokeFeatures
+
+  "doc display":
+    product: Document
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  docx:
+    product: Delivery
+    test_categories:
+      - DOCX
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  delivery:
+    product: Delivery
+    test_categories:
+      - WebsiteDelivery
+      - DOCX
+      - PrPSynopsisDelivery
+      - ResearchReportsDelivery
+      - RelatedInfoDelivery
+      - EdgeSmokeFeatures
+
+  "related info":
+    product: RelatedInfo
+    test_categories:
+      - RelatedInfoDelivery
+      - RelatedInfoContent
+      - RelatedInfoFacets
+      - RelatedInfoFlags
+      - RelatedInfoKeyciteCommand
+      - RelatedInfoIpTools
+      - RelatedInfoTabs
+      - RelatedInfoMiscellaneous
+      - RelatedInfoReferences
+
+  rendering:
+    product: Document
+    test_categories:
+      - DocDisplay
+      - Document
+      - DOCX
+      - EdgeSmokeFeatures
+
+  xslt:
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - DOCX
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  pipeline:
+    product: Document
+    test_categories:
+      - Document
+      - DocDisplay
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  canada:
+    product: Canada
+    test_categories:
+      - CanadaDocDisplay
+      - DocumentMisc
+      - Trillium
+      - TrilliumWebSite
+
+  carswell:
+    product: Canada
+    test_categories:
+      - CanadaDocDisplay
+      - DocumentMisc
+      - Trillium
+      - TrilliumWebSite
+
+  correctional:
+    product: Correctional
+    test_categories:
+      - WLNCorrectional
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  drafting:
+    product: Drafting
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  weblinks:
+    product: Weblinks
+    test_categories:
+      - GovernmentWeblinks
+      - Links
+      - DocDisplay
+      - EdgeSmokeFeatures
+
+  "government weblinks":
+    product: Weblinks
+    test_categories:
+      - GovernmentWeblinks
+      - Links
+      - EdgeSmokeFeatures
+
+  keycite:
+    product: KeyCite
+    test_categories:
+      - RelatedInfoKeyciteCommand
+      - FolderAnalysisKeyCite
+      - RelatedInfoContent
+      - RelatedInfoFlags
+      - RelatedInfoTabs
+
+  "research report":
+    product: ResearchReports
+    test_categories:
+      - ResearchReports
+      - ResearchReportsDelivery
+      - EdgeSmokeFeatures
+
+  "synopsis":
+    product: Delivery
+    test_categories:
+      - PrPSynopsisDelivery
+      - WebsiteDelivery
+      - EdgeSmokeFeatures
+
+  print:
+    product: Delivery
+    test_categories:
+      - WebsiteDelivery
+      - DOCX
+      - PrPSynopsisDelivery
+      - EdgeSmokeFeatures
+
+  pdf:
+    product: Delivery
+    test_categories:
+      - WebsiteDelivery
+      - DOCX
+      - EdgeSmokeFeatures
+
+  "litigation analytics":
+    product: LitigationAnalytics
+    test_categories:
+      - LitigationAnalyticsDeliveryTests
+      - LA_Filtering
+      - LA_OpportunityFinderTests
+
+  localization:
+    product: Document
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+  globalization:
+    product: Document
+    test_categories:
+      - DocDisplay
+      - Document
+      - EdgeSmokeFeatures
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CHANGE-TYPE RULES
+# ──────────────────────────────────────────────────────────────────────────────
+change_type_rules:
+  docs:
+    skip_all: true
+  chore:
+    test_categories_override:
+      - EdgeSmokeFeatures
+  test:
+    skip_integration: true
+
+# ──────────────────────────────────────────────────────────────────────────────
+# HIGH-RISK ALWAYS-ADD  (appended when risk_level == high)
+# ──────────────────────────────────────────────────────────────────────────────
+high_risk_always_add:
+  test_categories:
+    - Document
+    - DocDisplay
+    - DOCX
+    - EdgeSmokeFeatures

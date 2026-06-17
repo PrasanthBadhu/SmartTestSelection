@@ -72,6 +72,18 @@ repos:
     test_environment:   DEMO
     lookback_days:      7
 
+  # ── Document .NET Core repository ───────────────────────────────────────────
+  - name:               cobalt_document_netcore
+    full_name:          tr/cobalt_document_netcore
+    enabled:            true
+    description:        "Cobalt Document .NET Core — document rendering, delivery, display"
+    read_token_secret:  COBALT_READ_TOKEN
+    feature_map_repo:   tr/Seven-Kingdoms
+    feature_map_path:   feature-map-document.yml
+    feature_map_local:  "config/feature-map-document.yml"
+    test_environment:   DEMO
+    lookback_days:      7
+
   # ── Template for future repositories ────────────────────────────────────────
   # - name:               cobalt_documents
   #   full_name:          tr/cobalt_documents
