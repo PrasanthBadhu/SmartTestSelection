@@ -146,7 +146,7 @@ source-repo changed files   (cobalt_search | cobalt_website | cobalt_static-cont
 |---|---|---|
 | `.github/workflows/pr-watcher-scheduled.yml` | **NEW** | Scheduled PR watcher; reads repo-registry.yml; loops over 3 repos |
 | `.github/workflows/selective-regression.yml` | **UPDATED** | Added optional `source_repo` input; null-safe `classify_file` |
-| `.github/workflows/run-selective-regression.yml` | **UPDATED** | Same null-safe `classify_file` fix applied |
+| `.github/workflows/pr-poller.yml` | **UPDATED** | Same null-safe `classify_file` fix applied |
 | `config/repo-registry.yml` | **NEW** | Registers cobalt_search, cobalt_website, cobalt_static-content |
 | `config/feature-map-search.yml` | **UPDATED** | Fixed duplicate `analytics` keyword (was silently dropping 5 categories); added TrdSmoke |
 | `config/feature-map-website.yml` | **NEW** | Full map: 19 modules, 22+ sub_paths, 35+ keywords |
@@ -248,7 +248,7 @@ git push origin main
 **Step 4 — Deploy updated workflow files**
 ```bash
 git add .github/workflows/selective-regression.yml      # source_repo input; null-safe classify_file
-git add .github/workflows/run-selective-regression.yml  # same null-safe classify_file fix
+git add .github/workflows/pr-poller.yml  # same null-safe classify_file fix
 git commit -m "fix: null-safe classify_file; add source_repo input to selective-regression"
 git push origin main
 ```
@@ -481,7 +481,7 @@ C:\SelectiveRegressionSolution\
 ├── .github\workflows\
 │   ├── pr-watcher-scheduled.yml         ← NEW  → deploy to tr/CobaltRegressionTesting
 │   ├── selective-regression.yml         ← UPDATED (source_repo input; null-safe classify_file)
-│   └── run-selective-regression.yml     ← UPDATED (null-safe classify_file)
+│   └── pr-poller.yml                    ← UPDATED (null-safe classify_file)
 │
 ├── config\
 │   ├── repo-registry.yml                ← NEW  → deploy to tr/CobaltRegressionTesting

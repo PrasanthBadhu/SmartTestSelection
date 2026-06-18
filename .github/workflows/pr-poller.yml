@@ -1,6 +1,6 @@
 ################################################################################
-# run-selective-regression.yml
-# Location: tr/CobaltRegressionTesting/.github/workflows/run-selective-regression.yml
+# pr-poller.yml
+# Location: tr/CobaltRegressionTesting/.github/workflows/pr-poller.yml
 #
 # Purpose:
 #   Manually triggered workflow to discover PRs from tr/cobalt_search by either:
@@ -26,7 +26,7 @@
 #   REGRESSION_TRIGGER_PAT -- GitHub PAT with workflow:write on this repo
 ################################################################################
 
-name: Run Selective Regression (Manual)
+name: PR Poller (Manual)
 
 on:
   workflow_dispatch:
