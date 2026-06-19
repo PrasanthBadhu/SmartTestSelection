@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # feature-map-website.yml
 # Location: config/feature-map-website.yml
 #
@@ -15,13 +15,8 @@
 #           -> WL_DNet_*.yml workflows
 #
 # Priority order (highest wins):
-#   1. sub_path  â€” longest prefix match on the changed file path
-#   2. module    â€” top-level folder prefix match
-#   3. keyword   â€” PR title / body text match (case-insensitive)
 #
 # Actual repo layout (verified via gh api repos/tr/cobalt_website/git/trees/HEAD):
-#   WestlawNext/          Core website â€” WestlawNext.Web/, ProductViews/, WLNDocument/
-#   App/                  Platform application â€” Website/, PlatformApplication/, Unit Tests/
 #   WestKM/               WestKM knowledge management module
 #   Analytics/            Analytics module
 #
@@ -33,15 +28,12 @@
 version: "4.0"
 last_updated: "2026-06-18"
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # MODULE MAPPINGS  (key = top-level folder name in cobalt_website)
 # Prefix match: any file whose path starts with "<key>/" maps here.
 # risk_multiplier: high | medium | low
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 modules:
 
   WLNWebsite:
-    description: "Core Westlaw Next website â€” homepage, navigation, search results, documents"
     test_categories:
       - CoreWebsite
       - WebsiteCore1
@@ -54,7 +46,6 @@ modules:
     risk_multiplier: high
 
   WLNWebsiteCommon:
-    description: "Shared website foundation â€” templates, frameworks, common services"
     test_categories:
       - CoreWebsite
       - WebsiteCore1
@@ -131,7 +122,6 @@ modules:
     risk_multiplier: medium
 
   WebsiteDelivery:
-    description: "Document delivery on website â€” DOCX, print, copy"
     test_categories:
       - WebsiteDelivery
       - DOCX
@@ -305,9 +295,7 @@ modules:
       - EdgeSmokeFeatures
     risk_multiplier: low
 
-  # â”€â”€ Actual top-level modules (verified from cobalt_website repo tree) â”€â”€â”€â”€â”€â”€â”€â”€
   WestlawNext:
-    description: "WestlawNext/ â€” primary website module (WestlawNext.Web/, ProductViews/)"
     test_categories:
       - CoreWebsite
       - WebsiteCore1
@@ -411,7 +399,6 @@ modules:
     risk_multiplier: high
 
   WestKM:
-    description: "WestKM/ â€” West Key Number knowledge management module"
     test_categories:
       - WestKm
       - CoreWebsite
@@ -420,7 +407,6 @@ modules:
     risk_multiplier: medium
 
   App:
-    description: "App/ â€” platform application layer (Website, PlatformApplication, Unit Tests)"
     test_categories:
       - CoreWebsite
       - WebsiteCore1
@@ -435,7 +421,6 @@ modules:
     risk_multiplier: high
 
   Analytics:
-    description: "Analytics/ â€” website analytics module"
     test_categories:
       - WLAnalytics
       - WLAnalyticsIndigo
@@ -449,15 +434,12 @@ modules:
       - EdgeSmokeFeatures
     risk_multiplier: medium
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # SUB-MODULE PATH MAPPINGS  (key = file path prefix, longest match wins)
 # Priority 1 (highest).  Paths follow common TR Cobalt Maven layout:
 #   <Module>/src/main/java/com/tr/cobalt/web/<feature>/
 # Adjust once actual cobalt_website directory tree is confirmed.
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 sub_paths:
 
-  # â”€â”€ ANZ / Australia / New Zealand â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "ANZWebsite/":
     product: AUNZ
     test_categories:
@@ -510,7 +492,6 @@ sub_paths:
       - WLPNZSmoke
       - EdgeSmokeFeatures
 
-  # â”€â”€ Canada / Carswell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "CarswellWebsite/":
     product: Canada
     test_categories:
@@ -538,7 +519,6 @@ sub_paths:
       - WebsiteMisc
       - EdgeSmokeFeatures
 
-  # â”€â”€ Mobile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsiteMobile/":
     product: Mobile
     test_categories:
@@ -554,7 +534,6 @@ sub_paths:
       - AlertsMobile
       - EdgeSmokeFeatures
 
-  # â”€â”€ Delivery â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsiteDelivery/":
     product: Delivery
     test_categories:
@@ -574,7 +553,6 @@ sub_paths:
       - RelatedInfoDelivery
       - EdgeSmokeFeatures
 
-  # â”€â”€ Alerts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsiteAlerts/":
     product: Alerts
     test_categories:
@@ -596,7 +574,6 @@ sub_paths:
       - AlertsAdmin
       - EdgeSmokeFeatures
 
-  # â”€â”€ Analytics â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsiteAnalytics/":
     product: Analytics
     test_categories:
@@ -625,7 +602,6 @@ sub_paths:
       - TrdFacets
       - EdgeSmokeFeatures
 
-  # â”€â”€ Foldering / Research Organizer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsiteFoldering/":
     product: Foldering
     test_categories:
@@ -657,7 +633,6 @@ sub_paths:
       - SmartFolders
       - EdgeSmokeFeatures
 
-  # â”€â”€ KeyCite / Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/keycite/":
     product: KeyCite
     test_categories:
@@ -684,7 +659,6 @@ sub_paths:
       - RelatedInfoReferences
       - EdgeSmokeFeatures
 
-  # â”€â”€ Annotations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/annotation/":
     product: Annotations
     test_categories:
@@ -694,7 +668,6 @@ sub_paths:
       - ParagraphHighlighting
       - EdgeSmokeFeatures
 
-  # â”€â”€ Westlaw Precision â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsitePrecision/":
     product: WestlawPrecision
     test_categories:
@@ -729,7 +702,6 @@ sub_paths:
       - LitigationAnalytics
       - EdgeSmokeFeatures
 
-  # â”€â”€ Quick Check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/quickcheck/":
     product: QuickCheck
     test_categories:
@@ -743,7 +715,6 @@ sub_paths:
       - QuickCheckUiOpponent
       - EdgeSmokeFeatures
 
-  # â”€â”€ Redlining â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/redlining/":
     product: Redlining
     test_categories:
@@ -751,7 +722,6 @@ sub_paths:
       - RedliningRegressionTestSuite
       - EdgeSmokeFeatures
 
-  # â”€â”€ Tax â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/tax/":
     product: Tax
     test_categories:
@@ -760,7 +730,6 @@ sub_paths:
       - WLNTaxLiveChat_OffHours
       - EdgeSmokeFeatures
 
-  # â”€â”€ Business Law Center â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/blc/":
     product: BusinessLawCenter
     test_categories:
@@ -774,7 +743,6 @@ sub_paths:
       - SectionSearch
       - EdgeSmokeFeatures
 
-  # â”€â”€ Homepage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/homepage/":
     product: Website
     test_categories:
@@ -784,7 +752,6 @@ sub_paths:
       - HomePage
       - EdgeSmokeFeatures
 
-  # â”€â”€ Weblinks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WebsiteWeblinks/":
     product: Weblinks
     test_categories:
@@ -801,7 +768,6 @@ sub_paths:
       - CoreSearch
       - EdgeSmokeFeatures
 
-  # â”€â”€ Research Reports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNWebsite/src/main/java/com/tr/cobalt/web/researchreports/":
     product: ResearchReports
     test_categories:
@@ -811,7 +777,6 @@ sub_paths:
       - ResearchRecommendations2
       - EdgeSmokeFeatures
 
-  # â”€â”€ Actual cobalt_website structure (verified from repo tree) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WestlawNext/WestlawNext.Web/CaseNotebook/":
     product: WestlawNext
     test_categories:
@@ -1003,10 +968,7 @@ sub_paths:
       - TrdFacets
       - EdgeSmokeFeatures
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # KEYWORD MAPPINGS  (matched against PR title + body, case-insensitive)
-# Priority 3 (lowest â€” fires when no module or sub_path match is found).
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 keywords:
 
   website:
@@ -1392,7 +1354,6 @@ keywords:
       - Search4KUiIndigo
       - Search4KUiWln
 
-  # â”€â”€ New keywords for previously unmapped test categories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "case notebook":
     product: WestlawNext
     test_categories:
@@ -1823,7 +1784,6 @@ keywords:
       - DocumentMisc
       - EdgeSmokeFeatures
 
-  # â”€â”€ Java test category keywords â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   firmcentral:
     product: WestlawNext
     test_categories:
@@ -2058,9 +2018,7 @@ keywords:
       - "Westlaw Today"
       - EdgeSmokeFeatures
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # CHANGE-TYPE RULES
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 change_type_rules:
   docs:
     skip_all: true
@@ -2070,9 +2028,7 @@ change_type_rules:
   test:
     skip_integration: true
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # HIGH-RISK ALWAYS-ADD  (appended when risk_level == high)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 high_risk_always_add:
   test_categories:
     - CoreSearch

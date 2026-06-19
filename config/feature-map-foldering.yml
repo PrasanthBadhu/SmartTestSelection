@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # feature-map-foldering.yml
 # Location: config/feature-map-foldering.yml
 #
@@ -15,9 +15,6 @@
 #           -> WL_DNet_*.yml workflows
 #
 # Priority order (highest wins):
-#   1. sub_path  â€” longest prefix match on the changed file path
-#   2. module    â€” top-level folder prefix match
-#   3. keyword   â€” PR title / body text match (case-insensitive)
 #
 # Repo layout (verified via git ls-tree HEAD --name-only in tr/cobalt_foldering):
 #   Foldering/              Core foldering module (shared by all products)
@@ -38,15 +35,12 @@
 version: "3.0"
 last_updated: "2026-06-18"
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # MODULE MAPPINGS  (key = top-level folder name in cobalt_foldering)
 # Prefix match: any file whose path starts with "<key>/" maps here.
 # risk_multiplier: high | medium | low
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 modules:
 
   Foldering:
-    description: "Core foldering module â€” shared across all products"
     test_categories:
       - Foldering
       - ResearchOrganizer
@@ -65,7 +59,6 @@ modules:
     risk_multiplier: high
 
   FolderingCommon:
-    description: "Shared foldering utilities â€” base classes, common models, localization"
     test_categories:
       - Foldering
       - ResearchOrganizer
@@ -97,7 +90,6 @@ modules:
     risk_multiplier: high
 
   FormsFolderingCore:
-    description: "Forms-specific foldering core â€” NzFormsNPrecedent and related"
     test_categories:
       - Foldering
       - ResearchOrganizer
@@ -128,7 +120,6 @@ modules:
     risk_multiplier: medium
 
   History:
-    description: "Historical / audit modules â€” HistoryListener and HistoryPlatform"
     test_categories:
       - Foldering
       - FolderAnalysisKeyCite
@@ -187,13 +178,10 @@ modules:
       - EdgeSmokeFeatures
     risk_multiplier: low
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # SUB-MODULE PATH MAPPINGS  (key = file path prefix, longest match wins)
 # Priority 1 (highest).  Pattern: <Module>/src/  or  <Module>/<Sub>/
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 sub_paths:
 
-  # â”€â”€ Core foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "Foldering/src/":
     product: Foldering
     test_categories:
@@ -240,7 +228,6 @@ sub_paths:
       - ResearchOrganizer4
       - EdgeSmokeFeatures
 
-  # â”€â”€ Foldering Common â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "FolderingCommon/src/":
     product: Foldering
     test_categories:
@@ -259,7 +246,6 @@ sub_paths:
       - SaveSnippet_Edge
       - EdgeSmokeFeatures
 
-  # â”€â”€ Foldering Serialized â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "FolderingSerialized/src/":
     product: Foldering
     test_categories:
@@ -272,7 +258,6 @@ sub_paths:
       - FolderRedesign2
       - EdgeSmokeFeatures
 
-  # â”€â”€ Forms Foldering Core â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "FormsFolderingCore/src/":
     product: Foldering
     test_categories:
@@ -288,7 +273,6 @@ sub_paths:
       - NzFormsNPrecedent
       - EdgeSmokeFeatures
 
-  # â”€â”€ Shared Foldering Cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "SharedFolderingCache/src/":
     product: Foldering
     test_categories:
@@ -299,7 +283,6 @@ sub_paths:
       - ResearchOrganizer4
       - EdgeSmokeFeatures
 
-  # â”€â”€ History â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "History/HistoryPlatform/":
     product: Foldering
     test_categories:
@@ -315,7 +298,6 @@ sub_paths:
       - FolderAnalysisKeyCite
       - EdgeSmokeFeatures
 
-  # â”€â”€ Carswell Foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "CarswellFoldering/src/":
     product: Canada
     test_categories:
@@ -326,7 +308,6 @@ sub_paths:
       - ResearchOrganizer4
       - EdgeSmokeFeatures
 
-  # â”€â”€ TNP Carswell Foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "TNPCarswellFoldering/src/":
     product: Canada
     test_categories:
@@ -334,7 +315,6 @@ sub_paths:
       - ResearchOrganizer
       - EdgeSmokeFeatures
 
-  # â”€â”€ Correctional Foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "CorrectionalFoldering/src/":
     product: Correctional
     test_categories:
@@ -342,7 +322,6 @@ sub_paths:
       - ResearchOrganizer
       - EdgeSmokeFeatures
 
-  # â”€â”€ Drafting Foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "DraftingFoldering/src/":
     product: Drafting
     test_categories:
@@ -350,7 +329,6 @@ sub_paths:
       - ResearchOrganizer
       - EdgeSmokeFeatures
 
-  # â”€â”€ WFB Foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WFBFoldering/src/":
     product: WFB
     test_categories:
@@ -364,7 +342,6 @@ sub_paths:
       - Foldering
       - EdgeSmokeFeatures
 
-  # â”€â”€ eReader Foldering â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "eReaderFoldering/src/":
     product: eReader
     test_categories:
@@ -372,10 +349,7 @@ sub_paths:
       - ResearchOrganizer
       - EdgeSmokeFeatures
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # KEYWORD MAPPINGS  (matched against PR title + body, case-insensitive)
-# Priority 3 (lowest â€” fires when no module or sub_path match is found).
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 keywords:
 
   folder:
@@ -575,9 +549,7 @@ keywords:
       - Foldering
       - EdgeSmokeFeatures
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # CHANGE-TYPE RULES
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 change_type_rules:
   docs:
     skip_all: true
@@ -587,9 +559,7 @@ change_type_rules:
   test:
     skip_integration: true
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # HIGH-RISK ALWAYS-ADD  (appended when risk_level == high)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 high_risk_always_add:
   test_categories:
     - Foldering

@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # feature-map-alert.yml
 # Location: config/feature-map-alert.yml
 #
@@ -15,9 +15,6 @@
 #           -> WL_DNet_*.yml workflows
 #
 # Priority order (highest wins):
-#   1. sub_path  â€” longest prefix match on the changed file path
-#   2. module    â€” top-level folder prefix match
-#   3. keyword   â€” PR title / body text match (case-insensitive)
 #
 # Repo layout (verified via git ls-tree HEAD --name-only in tr/cobalt_alert):
 #   Alert/                  Core alert framework (shared by all products)
@@ -44,15 +41,12 @@
 version: "3.0"
 last_updated: "2026-06-16"
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # MODULE MAPPINGS  (key = top-level folder name in cobalt_alert)
 # Prefix match: any file whose path starts with "<key>/" maps here.
 # risk_multiplier: high | medium | low
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 modules:
 
   Alert:
-    description: "Core alert framework â€” shared across all products"
     test_categories:
       - AlertAccess
       - AlertsMobile
@@ -85,7 +79,6 @@ modules:
     risk_multiplier: high
 
   AlertCommon:
-    description: "Shared alert utilities â€” base classes, common models"
     test_categories:
       - AlertAccess
       - AlertsMobile
@@ -118,7 +111,6 @@ modules:
     risk_multiplier: high
 
   AlertProcessor:
-    description: "Core alert processing engine â€” creates and dispatches alert events"
     test_categories:
       - AlertAccess
       - AlertsMobile
@@ -150,7 +142,6 @@ modules:
     risk_multiplier: high
 
   AlertEventListener:
-    description: "Event listener infrastructure â€” receives and routes alert events"
     test_categories:
       - AlertAccess
       - AlertsMobile
@@ -166,7 +157,6 @@ modules:
     risk_multiplier: high
 
   AlertProductService:
-    description: "Product service layer â€” REST endpoints for alert CRUD operations"
     test_categories:
       - AlertAccess
       - AlertsMobile
@@ -214,7 +204,6 @@ modules:
     risk_multiplier: low
 
   AlertVeracode:
-    description: "Security scanning integration â€” no direct test category triggers"
     test_categories:
       - EdgeSmokeFeatures
     risk_multiplier: low
@@ -237,7 +226,6 @@ modules:
     risk_multiplier: medium
 
   ClassifierProcessor:
-    description: "Alert classification logic â€” categorises incoming alert events"
     test_categories:
       - AlertAccess
       - Alerts
@@ -253,7 +241,6 @@ modules:
     risk_multiplier: low
 
   PubProducerMaintainer:
-    description: "Publisher / producer maintenance â€” alert feed infrastructure"
     test_categories:
       - AlertAccess
       - Alerts
@@ -317,18 +304,14 @@ modules:
     risk_multiplier: low
 
   LoggingConfig:
-    description: "Logging configuration â€” no direct test category triggers"
     test_categories:
       - EdgeSmokeFeatures
     risk_multiplier: low
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # SUB-MODULE PATH MAPPINGS  (key = file path prefix, longest match wins)
 # Priority 1 (highest).  Pattern: <Module>/src/  or  <Module>/<Sub>/
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 sub_paths:
 
-  # â”€â”€ Core alert framework â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "Alert/src/":
     product: Alerts
     test_categories:
@@ -377,7 +360,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ Alert Common â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AlertCommon/src/":
     product: Alerts
     test_categories:
@@ -410,7 +392,6 @@ sub_paths:
       - "Westlaw Today"
       - EdgeSmokeFeatures
 
-  # â”€â”€ Alert Processor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AlertProcessor/src/":
     product: Alerts
     test_categories:
@@ -449,7 +430,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ Alert Event Listener â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AlertEventListener/src/":
     product: Alerts
     test_categories:
@@ -465,7 +445,6 @@ sub_paths:
       - "Alerts WestClip"
       - EdgeSmokeFeatures
 
-  # â”€â”€ Alert Product Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AlertProductService/src/":
     product: Alerts
     test_categories:
@@ -497,7 +476,6 @@ sub_paths:
       - "Westlaw Today"
       - EdgeSmokeFeatures
 
-  # â”€â”€ Alert Serialized â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AlertSerialized/src/":
     product: Alerts
     test_categories:
@@ -506,7 +484,6 @@ sub_paths:
       - AlertsAdmin
       - EdgeSmokeFeatures
 
-  # â”€â”€ Analytics Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AnalyticsAlert/src/":
     product: Analytics
     test_categories:
@@ -514,7 +491,6 @@ sub_paths:
       - AlertAccess
       - EdgeSmokeFeatures
 
-  # â”€â”€ Carswell Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "CarswellAlert/src/":
     product: Canada
     test_categories:
@@ -523,7 +499,6 @@ sub_paths:
       - AlertAccess
       - EdgeSmokeFeatures
 
-  # â”€â”€ TNP Carswell Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "TNPCarswellAlert/src/":
     product: Canada
     test_categories:
@@ -531,7 +506,6 @@ sub_paths:
       - AlertAccess
       - EdgeSmokeFeatures
 
-  # â”€â”€ Classifier Processor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "ClassifierProcessor/src/":
     product: Alerts
     test_categories:
@@ -539,7 +513,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ Judicial Practice Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "JudicialPracticeAlert/src/":
     product: Alerts
     test_categories:
@@ -547,7 +520,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ SLWB Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "SLWBAlert/src/":
     product: SLWB
     test_categories:
@@ -555,7 +527,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ WFB Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WFBAlert/src/":
     product: WFB
     test_categories:
@@ -563,7 +534,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ WLN Alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNAlert/src/":
     product: WestlawNext
     test_categories:
@@ -596,7 +566,6 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-  # â”€â”€ Publisher / Producer Maintainer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "PubProducerMaintainer/src/":
     product: Alerts
     test_categories:
@@ -604,10 +573,7 @@ sub_paths:
       - Alerts
       - EdgeSmokeFeatures
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # KEYWORD MAPPINGS  (matched against PR title + body, case-insensitive)
-# Priority 3 (lowest â€” fires when no module or sub_path match is found).
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 keywords:
 
   alert:
@@ -879,9 +845,7 @@ keywords:
       - Alerts
       - EdgeSmokeFeatures
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # CHANGE-TYPE RULES
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 change_type_rules:
   docs:
     skip_all: true
@@ -891,9 +855,7 @@ change_type_rules:
   test:
     skip_integration: true
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # HIGH-RISK ALWAYS-ADD  (appended when risk_level == high)
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 high_risk_always_add:
   test_categories:
     - AlertAccess
