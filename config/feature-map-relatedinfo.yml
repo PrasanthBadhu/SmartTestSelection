@@ -1,4 +1,4 @@
-################################################################################
+﻿################################################################################
 # feature-map-relatedinfo.yml
 # Location: config/feature-map-relatedinfo.yml
 #
@@ -15,9 +15,9 @@
 #           -> WL_DNet_*.yml workflows
 #
 # Priority order (highest wins):
-#   1. sub_path  — longest prefix match on the changed file path
-#   2. module    — top-level folder prefix match
-#   3. keyword   — PR title / body text match (case-insensitive)
+#   1. sub_path  â€” longest prefix match on the changed file path
+#   2. module    â€” top-level folder prefix match
+#   3. keyword   â€” PR title / body text match (case-insensitive)
 #
 # Repo layout (verified via git ls-tree HEAD --name-only in tr/cobalt_relatedinfo):
 #   RelatedInfo/              Core related info module (shared by all products)
@@ -36,15 +36,15 @@
 version: "2.0"
 last_updated: "2026-06-18"
 
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # MODULE MAPPINGS  (key = top-level folder name in cobalt_relatedinfo)
 # Prefix match: any file whose path starts with "<key>/" maps here.
 # risk_multiplier: high | medium | low
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 modules:
 
   RelatedInfo:
-    description: "Core related info module — shared pipeline, content, flags, delivery"
+    description: "Core related info module â€” shared pipeline, content, flags, delivery"
     test_categories:
       - RelatedInfoContent
       - RelatedInfoDelivery
@@ -59,7 +59,6 @@ modules:
       - GraphicalHistory
       - CitingReferences
       - NegativeHistory
-      - "Alerts Engine KeyCite"
       - "Alerts KeyCite"
       - "Inline KeyCite Flags"
       - "Related Documents"
@@ -70,7 +69,7 @@ modules:
     risk_multiplier: high
 
   RelatedInfoConfig:
-    description: "Configuration and manifest management — no direct product impact"
+    description: "Configuration and manifest management â€” no direct product impact"
     test_categories:
       - RelatedInfoContent
       - RelatedInfoMiscellaneous
@@ -106,7 +105,6 @@ modules:
       - GraphicalHistory
       - CitingReferences
       - NegativeHistory
-      - "Alerts Engine KeyCite"
       - "Alerts KeyCite"
       - "Inline KeyCite Flags"
       - "Related Documents"
@@ -138,7 +136,7 @@ modules:
     risk_multiplier: medium
 
   WestKMRelatedInfo:
-    description: "West Key Number related info module — keycite flags and history"
+    description: "West Key Number related info module â€” keycite flags and history"
     test_categories:
       - RelatedInfoKeyciteCommand
       - RelatedInfoFlags
@@ -185,13 +183,13 @@ modules:
       - EdgeSmokeFeatures
     risk_multiplier: low
 
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # SUB-MODULE PATH MAPPINGS  (key = file path prefix, longest match wins)
 # Priority 1 (highest).  Pattern: <Module>/src/  or  <Module>/<Sub>/
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 sub_paths:
 
-  # ── Core related info ────────────────────────────────────────────────────────
+  # â”€â”€ Core related info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "RelatedInfo/src/":
     product: RelatedInfo
     test_categories:
@@ -208,7 +206,6 @@ sub_paths:
       - GraphicalHistory
       - CitingReferences
       - NegativeHistory
-      - "Alerts Engine KeyCite"
       - "Alerts KeyCite"
       - "Inline KeyCite Flags"
       - "Related Documents"
@@ -242,7 +239,7 @@ sub_paths:
       - RelatedInfoTabs
       - EdgeSmokeFeatures
 
-  # ── Related Info Serialized ──────────────────────────────────────────────────
+  # â”€â”€ Related Info Serialized â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "RelatedInfoSerialized/src/":
     product: RelatedInfo
     test_categories:
@@ -255,7 +252,7 @@ sub_paths:
       - RelatedInfoReferences
       - EdgeSmokeFeatures
 
-  # ── WLN Related Info ─────────────────────────────────────────────────────────
+  # â”€â”€ WLN Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WLNRelatedInfo/src/":
     product: WestlawNext
     test_categories:
@@ -272,7 +269,6 @@ sub_paths:
       - GraphicalHistory
       - CitingReferences
       - NegativeHistory
-      - "Alerts Engine KeyCite"
       - "Alerts KeyCite"
       - "Inline KeyCite Flags"
       - "Related Documents"
@@ -297,7 +293,7 @@ sub_paths:
       - RelatedInfoFlags
       - EdgeSmokeFeatures
 
-  # ── West KM Related Info ─────────────────────────────────────────────────────
+  # â”€â”€ West KM Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "WestKMRelatedInfo/src/":
     product: WestKM
     test_categories:
@@ -309,7 +305,7 @@ sub_paths:
       - GraphicalHistory
       - EdgeSmokeFeatures
 
-  # ── Accelus Related Info ─────────────────────────────────────────────────────
+  # â”€â”€ Accelus Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "AccelusRelatedInfo/src/":
     product: Accelus
     test_categories:
@@ -318,7 +314,7 @@ sub_paths:
       - RelatedInfoMiscellaneous
       - EdgeSmokeFeatures
 
-  # ── Carswell Related Info ────────────────────────────────────────────────────
+  # â”€â”€ Carswell Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "CarswellRelatedInfo/src/":
     product: Canada
     test_categories:
@@ -330,7 +326,7 @@ sub_paths:
       - RelatedInfoMiscellaneous
       - EdgeSmokeFeatures
 
-  # ── TNP Carswell Related Info ────────────────────────────────────────────────
+  # â”€â”€ TNP Carswell Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "TNPCarswellRelatedInfo/src/":
     product: Canada
     test_categories:
@@ -339,7 +335,7 @@ sub_paths:
       - RelatedInfoMiscellaneous
       - EdgeSmokeFeatures
 
-  # ── Correctional Related Info ────────────────────────────────────────────────
+  # â”€â”€ Correctional Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "CorrectionalRelatedInfo/src/":
     product: Correctional
     test_categories:
@@ -348,7 +344,7 @@ sub_paths:
       - RelatedInfoMiscellaneous
       - EdgeSmokeFeatures
 
-  # ── Drafting Related Info ────────────────────────────────────────────────────
+  # â”€â”€ Drafting Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "DraftingRelatedInfo/src/":
     product: Drafting
     test_categories:
@@ -357,7 +353,7 @@ sub_paths:
       - RelatedInfoMiscellaneous
       - EdgeSmokeFeatures
 
-  # ── SLWB Related Info ────────────────────────────────────────────────────────
+  # â”€â”€ SLWB Related Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   "SlwbRelatedInfo/src/":
     product: SLWB
     test_categories:
@@ -366,10 +362,10 @@ sub_paths:
       - RelatedInfoMiscellaneous
       - EdgeSmokeFeatures
 
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # KEYWORD MAPPINGS  (matched against PR title + body, case-insensitive)
-# Priority 3 (lowest — fires when no module or sub_path match is found).
-# ──────────────────────────────────────────────────────────────────────────────
+# Priority 3 (lowest â€” fires when no module or sub_path match is found).
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 keywords:
 
   "related info":
@@ -586,14 +582,13 @@ keywords:
     product: KeyCite
     test_categories:
       - "Alerts KeyCite"
-      - "Alerts Engine KeyCite"
       - RelatedInfoKeyciteCommand
       - RelatedInfoFlags
       - EdgeSmokeFeatures
 
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # CHANGE-TYPE RULES
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 change_type_rules:
   docs:
     skip_all: true
@@ -603,9 +598,9 @@ change_type_rules:
   test:
     skip_integration: true
 
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # HIGH-RISK ALWAYS-ADD  (appended when risk_level == high)
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 high_risk_always_add:
   test_categories:
     - RelatedInfoContent
