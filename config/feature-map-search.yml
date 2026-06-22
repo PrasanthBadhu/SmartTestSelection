@@ -68,8 +68,6 @@ modules:
       - "Public Utility Commissions"
       - "Recent Filters"
       - "Search Platform WLN"
-      - "Search Results Modernization - Daily"
-      - "Search Results Modernization - Weekly"
       - "SearchFacets"
       - "WLN Core User Scenarios"
       - "WLN Enhancements"
@@ -139,8 +137,6 @@ modules:
       - "Public Utility Commissions"
       - "Recent Filters"
       - "Search Platform WLN"
-      - "Search Results Modernization - Daily"
-      - "Search Results Modernization - Weekly"
       - "SearchFacets"
       - "WLN Core User Scenarios"
       - "WLN Enhancements"
@@ -228,8 +224,6 @@ modules:
       - "Public Utility Commissions"
       - "Recent Filters"
       - "Search Platform WLN"
-      - "Search Results Modernization - Daily"
-      - "Search Results Modernization - Weekly"
       - "SearchFacets"
       - "WLN Core User Scenarios"
       - "WLN Enhancements"
@@ -855,8 +849,6 @@ keywords:
   "search results modernization":
     product: Search
     test_categories:
-      - "Search Results Modernization - Daily"
-      - "Search Results Modernization - Weekly"
       - CoreSearch
       - GlobalSearch
       - EdgeSmokeFeatures

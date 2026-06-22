@@ -80,7 +80,6 @@ modules:
       - "Find & Print"
       - "Global Navigation"
       - "Home Page"
-      - "Preferences"
       - "Related Information UI Platform"
       - "Westlaw Today"
       - EdgeSmokeFeatures
@@ -1596,7 +1595,6 @@ keywords:
   preferences:
     product: WestlawNext
     test_categories:
-      - "Preferences"
       - CoreWebsite
       - WebsiteCore1
       - EdgeSmokeFeatures

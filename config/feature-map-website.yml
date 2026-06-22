@@ -375,13 +375,11 @@ modules:
       - "Edge Modules Smoke"
       - "Edge 2.0 Smoke Tests (Westlaw Precision)"
       - "Find & Print"
-      - "FirmCentral - Matter Management"
       - "Global Navigation"
       - "Home Page"
       - "New York Official Digest"
       - "Portal Manager Find & Print"
       - "Practical Law US"
-      - "Preferences"
       - "Professional Profiles"
       - "Professional Reports"
       - "Public Utility Commissions"
@@ -1787,14 +1785,12 @@ keywords:
   firmcentral:
     product: WestlawNext
     test_categories:
-      - "FirmCentral - Matter Management"
       - CoreWebsite
       - EdgeSmokeFeatures
 
   "matter management":
     product: WestlawNext
     test_categories:
-      - "FirmCentral - Matter Management"
       - CoreWebsite
       - EdgeSmokeFeatures
 
@@ -1840,7 +1836,6 @@ keywords:
   preferences:
     product: WestlawNext
     test_categories:
-      - "Preferences"
       - CoreWebsite
       - EdgeSmokeFeatures
 
@@ -2004,8 +1999,6 @@ keywords:
   "search results modernization":
     product: Search
     test_categories:
-      - "Search Results Modernization - Daily"
-      - "Search Results Modernization - Weekly"
       - CoreSearch
       - GlobalSearch
       - EdgeSmokeFeatures
