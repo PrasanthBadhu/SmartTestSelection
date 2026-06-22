@@ -275,6 +275,60 @@ CAT_TO_WORKFLOW = {
     "Wln_Enhancement_tests_indigo": ["WL_DNet_Edge_WlnEnhancementsTests_Indigo_Edge"],
 }
 
+# ---------------------------------------------------------------------------
+# TestCategory -> WL_Java workflow mapping
+# Java-based regression workflows dispatched alongside (or instead of) DNet
+# ---------------------------------------------------------------------------
+JAVA_CAT_TO_WORKFLOW = {
+    "Alerts Admin 1":                        ["WL_Java_Next_Admin_1"],
+    "Alerts Admin 2":                        ["WL_Java_Next_Admin_2"],
+    "Alerts Admin 3":                        ["WL_Java_Next_Admin_3"],
+    "Alerts Admin 4":                        ["WL_Java_Next_AlertsUI_Admin_4"],
+    "Alerts Admin Edge":                     ["WL_Java_Edge_AlertsUI_Admin_Maven"],
+    "Alerts Admin-Bulk":                     ["WL_Java_Next_Admin_Bulk"],
+    "Alerts Alert Center":                   ["WL_Java_Next_AlertsCenter", "WL_Java_Edge_AlertsCenter"],
+    "Alerts Alert Center-Monthly":           ["WL_Java_Next_AlertsCenter_Bulk_WL"],
+    "Alerts Company Investigator":           ["WL_Java_Edge_Alert_CompanyInvestigator", "WL_Java_Next_Alert_CompanyInvestigator"],
+    "Alerts Court Wire":                     ["WL_Java_Next_AlertsUI_CourtWire", "WL_Java_Edge_AlertsUI_CourtWire"],
+    "Alerts Docket Alert":                   ["WL_Java_Edge_DocketAlert", "WL_Java_Next_DocketAlert"],
+    "Alerts Docket Track":                   ["WL_Java_Edge_Docket_Track", "WL_Java_Next_Docket_Track"],
+    "Alerts Email Delivery":                 ["WL_Java_Next_AlertsUI_EmailDelivery_Admin"],
+    "Alerts KeyCite":                        ["WL_Java_Edge_AlertsUI_KeyCite_Cloud", "WL_Java_Next_AlertsUI_KeyCite_Cloud"],
+    "Alerts Newsletter":                     ["WL_Java_Next_AlertsUI_Newsletter", "WL_Java_Next_AlertsUI_Newsletter_1", "WL_Java_Next_AlertsUI_Newsletter_Moderation"],
+    "Alerts UI UK":                          ["WL_Java_Next_AlertsUI_UK"],
+    "Alerts Westclip":                       ["WL_Java_Edge_WestClip", "WL_Java_Next_WestClip"],
+    "Arbitration II":                        ["WL_Java_Edge_Arbitration", "WL_Java_Next_Arbitration"],
+    "BLC Core Regression":                   ["WL_Java_Next_BLCCore", "WL_Java_Edge_BLCCore"],
+    "Company Investigator Core":             ["WL_JAVA_Edge_CompanyInvestigator_Maven", "WL_JAVA_Next_CompanyInvestigator_Maven"],
+    "Content Types / Set Default":           ["WL_Java_Edge_ContentTypes"],
+    "Data Orchestration Core Platform":      ["WL_Java_Next_DataOrchestration"],
+    "Dockets Gateway":                       ["WL_Java_Edge_DocketsGateway", "WL_Java_Next_DocketsGateway"],
+    "Edge Modules Smoke":                    ["WL_Java_Edge_Module_Smoke"],
+    "Find & Print":                          ["WL_Java_Edge_FindAndPrint", "WL_Java_Next_FindAndPrint"],
+    "Global Navigation":                     ["WL_Java_Edge_GlobalNavigation"],
+    "Home Page":                             ["WL_Java_Edge_HomePage"],
+    "Inline Keycite Flags":                  ["WL_Java_Edge_InlineKC", "WL_Java_Next_InlineKC"],
+    "New York Official Digest":              ["WL_Java_Edge_NYOD", "WL_Java_Next_NYOD"],
+    "Portal Manager Find&Print":             ["WL_Java_Edge_PortalManagerFP", "WL_Java_Next_PortalManagerFP"],
+    "Practical Law US":                      ["WL_Java_Edge_PracticalLaw", "WL_Java_Next_PracticalLaw"],
+    "Professional Profiles":                 ["WL_Java_Next_professionalProfiles"],
+    "Professional Reports":                  ["WL_Java_Next_ProfessionalReports", "WL_Java_Edge_ProfessionalReports"],
+    "Public Utility Commissions":            ["WL_Java_Edge_PUC", "WL_Java_Next_PUC"],
+    "Recent Filters":                        ["WL_Java_Edge_RecentFilters"],
+    "Related Documents":                     ["WL_Java_Edge_RelatedDocuments"],
+    "Related Information Copy With Reference": ["WL_JAVA_Next_RelatedInfo_CopyWithRef"],
+    "Related Information UI Platform":       ["WL_Java_Next_RelatedInfo_Platform"],
+    "Scrolling":                             ["WL_Edge_Java_Scrolling"],
+    "Search Platform WLN":                   ["WL_Java_Next_Search_Platform"],
+    "SearchFacets":                          ["WL_Java_Edge_SearchFacets"],
+    "Westlaw Today":                         ["WL_Java_WestlawToday"],
+    "WLN Campus":                            ["WL_Java_Next_WLNCampus"],
+    "WLN Core User Scenarios":               ["WL_Java_Edge_Core", "WL_Java_Next_Core_Part_1", "WL_Java_Next_Core_Part_2"],
+    "WLN Enhancements":                      ["WL_Java_Edge_Enhancements", "WL_Java_Next_Enhancements"],
+    "Edge 2.0 Smoke Tests(Westlaw Precision)": ["WL_Java_Precision_Edge2_Module_Smoke"],
+    "Westlaw Advantage":                     ["Westlaw_Advantage_Smoke"],
+}
+
 
 # ---------------------------------------------------------------------------
 # YAML loader from Seven-Kingdoms
