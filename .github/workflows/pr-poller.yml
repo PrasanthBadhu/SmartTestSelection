@@ -778,9 +778,11 @@ jobs:
           WF_COUNT:      ${{ steps.map.outputs.workflow_count         || '0' }}
           JAVA_WF_COUNT: ${{ steps.map.outputs.java_workflow_count    || '0' }}
           PLAN_COUNT:    ${{ steps.map.outputs.plan_count             || '0' }}
+          TRIGGER_DATE:  ${{ github.run_started_at }}
         run: |
           python3 - <<'EOF'
-          import json, os
+          import json, os, yaml
+          from datetime import date, datetime, timedelta, timezone
           from pathlib import Path
 
           pr_numbers    = os.environ.get("PR_NUMBERS", "")
@@ -933,6 +935,94 @@ jobs:
                           f"| `{wf}.yml` | Java | `TEST_ENVIRONMENT={env_input}` `TEST_SITE={test_site}` | `tr/CobaltRegressionTesting` |"
                       )
                   lines.append("")
+
+              # ── Workflows Not Dispatched ──────────────────────────────────────
+              if env_input.upper() == "DEMO":
+                  trigger_ts   = os.environ.get("TRIGGER_DATE", "").strip()
+                  if trigger_ts:
+                      trigger_date = datetime.fromisoformat(
+                          trigger_ts.replace("Z", "+00:00")).date()
+                  else:
+                      trigger_date = date.today()
+
+                  DAY_NAMES        = ["Monday","Tuesday","Wednesday","Thursday",
+                                      "Friday","Saturday","Sunday"]
+                  trigger_day_name = DAY_NAMES[trigger_date.weekday()]
+
+                  schedule_path = Path("config/demo-schedule.yml")
+                  freq_path     = Path("config/workflow-frequency.yml")
+
+                  lines += ["---", "", "### Workflows Not Dispatched", "",
+                             f"> **Trigger:** {trigger_date} ({trigger_day_name})", ""]
+
+                  if not schedule_path.exists() or not freq_path.exists():
+                      lines += ["> `config/demo-schedule.yml` or `config/workflow-frequency.yml` "
+                                "not found — skipping.", ""]
+                  else:
+                      sched_data   = yaml.safe_load(schedule_path.read_text())
+                      patterns_def = sched_data.get("patterns", {})
+                      freq_data    = yaml.safe_load(freq_path.read_text())
+                      all_wf_freqs = freq_data.get("workflows", {})
+
+                      matching_week = None
+                      for entry in sched_data.get("schedule", []):
+                          week_of  = date.fromisoformat(entry["week_of"])
+                          week_end = week_of + timedelta(days=6)
+                          if week_of <= trigger_date <= week_end:
+                              matching_week = entry
+                              break
+
+                      if not matching_week:
+                          lines += ["> No DEMO week entry found for this date in "
+                                    "`config/demo-schedule.yml`.", ""]
+                      else:
+                          pattern  = str(matching_week.get("pattern", "A"))
+                          holidays = matching_week.get("holidays") or []
+
+                          if trigger_day_name in ("Saturday", "Sunday"):
+                              lines += ["> Weekend — no scheduled analysis.", ""]
+                          elif trigger_day_name in holidays:
+                              lines += [f"> **{trigger_day_name}** is a holiday this week "
+                                        "— no analysis scheduled.", ""]
+                          else:
+                              day_sched      = patterns_def.get(pattern, {}).get("schedule", {})
+                              expected_freqs = day_sched.get(trigger_day_name, ["Daily"])
+                              expected_set   = set(expected_freqs)
+
+                              lines += [
+                                  f"> Pattern **{pattern}** · {trigger_day_name} "
+                                  f"→ expected frequencies: **{', '.join(expected_freqs)}**",
+                                  "",
+                              ]
+
+                              dispatched_dnet_set = set(all_dotnet)
+                              dispatched_java_set = set(all_java)
+
+                              nd_dnet = []
+                              nd_java = []
+                              for wf_name, wf_freq in all_wf_freqs.items():
+                                  if wf_freq not in expected_set:
+                                      continue
+                                  if wf_name.startswith("WL_Java_"):
+                                      if wf_name not in dispatched_java_set:
+                                          nd_java.append((wf_name, wf_freq))
+                                  else:
+                                      if wf_name not in dispatched_dnet_set:
+                                          nd_dnet.append((wf_name, wf_freq))
+
+                              if nd_dnet or nd_java:
+                                  lines += [
+                                      "| Workflow | Type | Frequency |",
+                                      "|---|---|---|",
+                                  ]
+                                  for wf, freq in sorted(nd_dnet):
+                                      lines.append(f"| `{wf}.yml` | DNet | {freq} |")
+                                  for wf, freq in sorted(nd_java):
+                                      lines.append(f"| `{wf}.yml` | Java | {freq} |")
+                                  lines.append("")
+                              else:
+                                  lines += ["*All expected workflows for this day were dispatched.*",
+                                            ""]
 
           with open(os.environ.get("GITHUB_STEP_SUMMARY", "summary.md"), "a") as f:
               f.write("\n".join(lines) + "\n")
