@@ -1,0 +1,326 @@
+################################################################################
+# demo-schedule.yml
+# Location: config/demo-schedule.yml
+#
+# Purpose:
+#   DEMO environment analysis schedule for 2026-2027.
+#   Extracted from the release calendar (calendar.xlsx).
+#
+# Analysis types:
+#   Daily        - run every demo day
+#   WeeklyTwice  - run on the full-demo day only (WT)
+#   Weekly       - run on the full-demo day only  (W)
+#
+# Pattern rules (Mon–Fri only; QED days and holidays are excluded):
+#   Pattern A  →  full-demo day = Monday
+#     Monday   : Daily + Weekly + WeeklyTwice
+#     Tue–Fri  : Daily only
+#
+#   Pattern B  →  full-demo day = Tuesday
+#     Monday   : Daily only
+#     Tuesday  : Daily + Weekly + WeeklyTwice
+#     Wed–Fri  : Daily only
+#
+# Fields per entry:
+#   week_of    : the Monday date of that calendar week  (YYYY-MM-DD)
+#   demo_date  : the date that runs Daily+W+WT          (YYYY-MM-DD)
+#   pattern    : A or B
+#   holidays   : days skipped that week (no analysis run)
+#   notes      : free-text context
+################################################################################
+
+version: "1.0"
+last_updated: "2026-06-26"
+
+# Pattern reference (read by tooling):
+patterns:
+  A:
+    full_demo_day: Monday
+    schedule:
+      Monday:    [Daily, Weekly, WeeklyTwice]
+      Tuesday:   [Daily]
+      Wednesday: [Daily]
+      Thursday:  [Daily]
+      Friday:    [Daily]
+  B:
+    full_demo_day: Tuesday
+    schedule:
+      Monday:    [Daily]
+      Tuesday:   [Daily, Weekly, WeeklyTwice]
+      Wednesday: [Daily]
+      Thursday:  [Daily]
+      Friday:    [Daily]
+
+# ── 2026 Demo Schedule ────────────────────────────────────────────────────────
+schedule:
+
+  # ── January 2026 ─────────────────────────────────────────────────────────────
+  - week_of:   "2026-01-12"
+    demo_date: "2026-01-12"
+    pattern:   A
+    holidays:  [Thursday]   # 15 Jan — Sankranthi
+    notes:     "Mon 12 Jan DEMO full. Thu Sankranthi holiday — skip Thursday analysis."
+
+  - week_of:   "2026-01-19"
+    demo_date: "2026-01-20"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 20 Jan DEMO full."
+
+  - week_of:   "2026-01-26"
+    demo_date: "2026-01-27"
+    pattern:   B
+    holidays:  [Monday]     # 26 Jan — Republic Day
+    notes:     "Mon Republic Day holiday. Tue 27 Jan DEMO full."
+
+  # ── February 2026 ────────────────────────────────────────────────────────────
+  - week_of:   "2026-02-02"
+    demo_date: "2026-02-03"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 3 Feb DEMO full."
+
+  - week_of:   "2026-02-09"
+    demo_date: "2026-02-09"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 9 Feb DEMO full."
+
+  - week_of:   "2026-02-23"
+    demo_date: "2026-02-23"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 23 Feb DEMO full."
+
+  # ── March 2026 ───────────────────────────────────────────────────────────────
+  - week_of:   "2026-03-02"
+    demo_date: "2026-03-03"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 3 Mar DEMO full."
+
+  - week_of:   "2026-03-09"
+    demo_date: "2026-03-09"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 9 Mar DEMO full."
+
+  - week_of:   "2026-03-23"
+    demo_date: "2026-03-23"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 23 Mar DEMO full."
+
+  - week_of:   "2026-03-30"
+    demo_date: "2026-03-31"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 31 Mar DEMO full."
+
+  # ── April 2026 ───────────────────────────────────────────────────────────────
+  - week_of:   "2026-04-06"
+    demo_date: "2026-04-06"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 6 Apr DEMO full."
+
+  - week_of:   "2026-04-20"
+    demo_date: "2026-04-20"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 20 Apr DEMO full."
+
+  - week_of:   "2026-04-27"
+    demo_date: "2026-04-27"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 27 Apr DEMO full."
+
+  # ── May 2026 ─────────────────────────────────────────────────────────────────
+  - week_of:   "2026-05-04"
+    demo_date: "2026-05-04"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 4 May DEMO full."
+
+  - week_of:   "2026-05-18"
+    demo_date: "2026-05-18"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 18 May DEMO full."
+
+  - week_of:   "2026-05-25"
+    demo_date: "2026-05-26"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 26 May DEMO full."
+
+  # ── June 2026 ────────────────────────────────────────────────────────────────
+  - week_of:   "2026-06-01"
+    demo_date: "2026-06-01"
+    pattern:   A
+    holidays:  [Tuesday]    # 2 Jun — Telangana Formation Day
+    notes:     "Mon 1 Jun DEMO full. Tue Telangana Formation Day holiday."
+
+  - week_of:   "2026-06-15"
+    demo_date: "2026-06-15"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 15 Jun DEMO full."
+
+  - week_of:   "2026-06-22"
+    demo_date: "2026-06-23"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 23 Jun DEMO full."
+
+  - week_of:   "2026-06-29"
+    demo_date: "2026-06-29"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 29 Jun DEMO full."
+
+  # ── July 2026 ────────────────────────────────────────────────────────────────
+  - week_of:   "2026-07-13"
+    demo_date: "2026-07-13"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 13 Jul DEMO full."
+
+  - week_of:   "2026-07-20"
+    demo_date: "2026-07-20"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 20 Jul DEMO full."
+
+  - week_of:   "2026-07-27"
+    demo_date: "2026-07-27"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 27 Jul DEMO full."
+
+  # ── August 2026 ──────────────────────────────────────────────────────────────
+  - week_of:   "2026-08-10"
+    demo_date: "2026-08-10"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 10 Aug DEMO full."
+
+  - week_of:   "2026-08-17"
+    demo_date: "2026-08-18"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 18 Aug DEMO full."
+
+  - week_of:   "2026-08-24"
+    demo_date: "2026-08-24"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 24 Aug DEMO full."
+
+  - week_of:   "2026-08-31"
+    demo_date: "2026-08-31"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 31 Aug DEMO full."
+
+  # ── September 2026 ───────────────────────────────────────────────────────────
+  - week_of:   "2026-09-07"
+    demo_date: "2026-09-07"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 7 Sep DEMO full."
+
+  - week_of:   "2026-09-21"
+    demo_date: "2026-09-21"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 21 Sep DEMO full."
+
+  - week_of:   "2026-09-28"
+    demo_date: "2026-09-29"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 29 Sep DEMO full."
+
+  # ── October 2026 ─────────────────────────────────────────────────────────────
+  - week_of:   "2026-10-05"
+    demo_date: "2026-10-05"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 5 Oct DEMO full."
+
+  - week_of:   "2026-10-19"
+    demo_date: "2026-10-19"
+    pattern:   A
+    holidays:  [Tuesday]    # 20 Oct — Dussehra
+    notes:     "Mon 19 Oct DEMO full. Tue Dussehra holiday."
+
+  - week_of:   "2026-10-26"
+    demo_date: "2026-10-27"
+    pattern:   B
+    holidays:  [Monday]     # 26 Oct — Global Mental Health Day (observed)
+    notes:     "Mon Global Mental Health Day. Tue 27 Oct DEMO full."
+
+  # ── November 2026 ────────────────────────────────────────────────────────────
+  - week_of:   "2026-11-02"
+    demo_date: "2026-11-02"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 2 Nov DEMO full."
+
+  - week_of:   "2026-11-16"
+    demo_date: "2026-11-16"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 16 Nov DEMO full."
+
+  - week_of:   "2026-11-23"
+    demo_date: "2026-11-24"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 24 Nov DEMO full."
+
+  - week_of:   "2026-11-30"
+    demo_date: "2026-11-30"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 30 Nov DEMO full."
+
+  # ── December 2026 ────────────────────────────────────────────────────────────
+  - week_of:   "2026-12-14"
+    demo_date: "2026-12-14"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 14 Dec DEMO full."
+
+  - week_of:   "2026-12-21"
+    demo_date: "2026-12-22"
+    pattern:   B
+    holidays:  [Friday]     # 25 Dec — Christmas
+    notes:     "Tue 22 Dec DEMO full. Fri Christmas holiday."
+
+  - week_of:   "2026-12-28"
+    demo_date: "2026-12-28"
+    pattern:   A
+    holidays:  []
+    notes:     "Mon 28 Dec DEMO full."
+
+  # ── January 2027 ─────────────────────────────────────────────────────────────
+  - week_of:   "2027-01-11"
+    demo_date: "2027-01-11"
+    pattern:   A
+    holidays:  [Thursday]   # 14 Jan — Sankranti
+    notes:     "Mon 11 Jan DEMO full. Thu Sankranti holiday."
+
+  - week_of:   "2027-01-18"
+    demo_date: "2027-01-19"
+    pattern:   B
+    holidays:  []
+    notes:     "Tue 19 Jan DEMO full."
+
+  - week_of:   "2027-01-25"
+    demo_date: "2027-01-25"
+    pattern:   A
+    holidays:  [Tuesday]    # 26 Jan — Republic Day
+    notes:     "Mon 25 Jan DEMO full. Tue Republic Day holiday."
